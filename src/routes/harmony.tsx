@@ -27,6 +27,37 @@ function HarmonyPage() {
         <HarmonyLab />
         <div className="flex flex-col gap-4">
           <Paper>
+            <h2 className="font-display text-xl font-semibold">Two words hold the whole rule</h2>
+            <p className="mt-2 text-sm text-muted">
+              Hungarian classrooms teach the split with two words that each carry their camp’s
+              vowels. Learn the pair and you can classify almost any word on sight.
+            </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div>
+                <p className="font-serif text-2xl">
+                  <Hu>autó</Hu>
+                </p>
+                <p className="text-xs text-muted">car · a á o ó u ú</p>
+                <p className="mt-1 text-sm text-muted">Takes the back endings.</p>
+              </div>
+              <div>
+                <p className="font-serif text-2xl">
+                  <Hu>teniszütő</Hu>
+                </p>
+                <p className="text-xs text-muted">tennis racket · e é i í ö ő ü ű</p>
+                <p className="mt-1 text-sm text-muted">Takes the front and rounded endings.</p>
+              </div>
+            </div>
+            <p className="mt-4 border-t border-border pt-3 text-sm text-muted">
+              So in any three-column ending table, <Hu>autó</Hu> words read the{" "}
+              <span className="font-medium text-fg">back</span> column and <Hu>teniszütő</Hu> words
+              read <span className="font-medium text-fg">front</span> or{" "}
+              <span className="font-medium text-fg">rounded</span>. Hungarian calls the two camps{" "}
+              <Hu>mély</Hu> (deep) and <Hu>magas</Hu> (high); English grammars say back and front —
+              same split, different name.
+            </p>
+          </Paper>
+          <Paper>
             <h2 className="font-display text-xl font-semibold">The three camps</h2>
             <ul className="mt-3 space-y-3 text-sm text-muted">
               <li>
@@ -42,8 +73,9 @@ function HarmonyPage() {
                 <Hu>könyv, ül, tűz</Hu>
               </li>
               <li>
-                <span className="font-medium text-fg">Neutral</span> — i í sit out. Alone they act
-                back: <Hu>írok</Hu>, not írek. In <Hu>segít</Hu> the e decides (front).
+                <span className="font-medium text-fg">Neutral</span> — i í sit out. The <Hu>i</Hu>{" "}
+                in <Hu>teniszütő</Hu> rides along with the front camp, but on its own it acts back:{" "}
+                <Hu>írok</Hu>, not írek. In <Hu>segít</Hu> the e decides (front).
               </li>
             </ul>
           </Paper>
