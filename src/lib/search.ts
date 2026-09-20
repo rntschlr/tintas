@@ -36,10 +36,14 @@ export function buildSearchIndex(): SearchHit[] {
     // suffixes is ["—"] for the nominative (no ending) — join only real endings
     // so the subtitle never doubles up on dashes.
     const endings = c.suffixes.filter((s) => s !== "—").join(" / ");
+    // c.english (e.g. genitive's "the one belonging to…") can already end in
+    // its own punctuation — strip it before appending our period so the
+    // subtitle never reads "…. ".
+    const gloss = c.english.replace(/[.…]+$/, "");
     hits.push({
       href: `/cases/${c.id}`,
       title: `${c.headline} · ${c.name}`,
-      subtitle: `${c.huName}${endings ? `  ${endings}` : ""} — ${c.english}. ${c.summary}`,
+      subtitle: `${c.huName}${endings ? `  ${endings}` : ""} — ${gloss}. ${c.summary}`,
     });
   }
   for (const v of VERB_TOPICS) {

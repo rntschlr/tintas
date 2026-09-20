@@ -40,7 +40,7 @@ export function classifyHarmony(word: string): {
   label: string;
   twoFold: string;
   threeFold: string;
-  /** Set when the stem is i/í-only and not in the lexicon — do not pick a camp. */
+  /** Set when there is nothing to classify: no vowel at all, or an i/í-only stem not in the lexicon — do not pick a camp. */
   caveat?: string;
 } {
   const w = word.toLowerCase().normalize("NFC").trim();
