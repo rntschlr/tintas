@@ -69,7 +69,7 @@ export const CASES: NounCase[] = [
     contrast: {
       a: { hu: "A kutya látja a macskát.", en: "The dog sees the cat." },
       b: { hu: "A macskát látja a kutya.", en: "The dog sees the cat." },
-      note: "Same meaning, different order. The -t, not the position, says who is being seen.",
+      note: "Same grammatical roles either way — the -t, not the position, says who is being seen. Fronting the object like this shifts emphasis onto the cat, the way stress would in English.",
     },
     notes: [
       "After a vowel, just -t: kávét, autót.",
@@ -139,7 +139,7 @@ export const CASES: NounCase[] = [
       { hu: "A barátommal megyek.", en: "I’m going with my friend." },
       { hu: "Tollal írok.", en: "I write with a pen." },
       { hu: "Busszal jövök.", en: "I come by bus." },
-      { hu: "Késsel vágom.", en: "I cut it with a knife." },
+      { hu: "Késsel vágom a kenyeret.", en: "I cut the bread with a knife." },
       { hu: "Beszélek az orvossal.", en: "I’m speaking with the doctor." },
     ],
   },
@@ -162,12 +162,12 @@ export const CASES: NounCase[] = [
     notes: [
       "One-fold ending: always -ért.",
       "A gyerekért megyek — I’m going to pick up the child.",
-      "Köszönöm a segítségért — thank you for the help.",
+      "Hálás vagyok a segítségért — grateful for the help.",
     ],
     examples: [
       { hu: "Virágért megyek.", en: "I’m going for flowers." },
       { hu: "Harcolok a szabadságért.", en: "I fight for freedom." },
-      { hu: "Köszönöm a segítségért.", en: "Thank you for the help." },
+      { hu: "Hálás vagyok a segítségért.", en: "I’m grateful for the help." },
       { hu: "A gyerekért megyek.", en: "I’m going to pick up the child." },
       { hu: "Mindent megtennék érted.", en: "I’d do anything for you." },
     ],

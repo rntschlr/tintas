@@ -39,8 +39,8 @@ The `Strict-Transport-Security` response header only helps a browser that alread
 5. Verify both hostnames before going further:
 
    ```bash
-   curl -sI https://tintas.app/      | grep -i strict-transport
-   curl -sI https://www.tintas.app/  | grep -i strict-transport
+   curl -sI  https://tintas.app/     | grep -i strict-transport
+   curl -sIL https://www.tintas.app/ | grep -i strict-transport
    ```
 
 6. Only once both are clean, **SSL/TLS → Edge Certificates → HSTS → Enable**: max-age 12 months, **Apply HSTS Policy to subdomains: on**, **No-Sniff: on**, **Preload: off**.

@@ -2,7 +2,16 @@ import { LETTERS } from "@/data/alphabet";
 import { CASES } from "@/data/cases";
 import { VERB_TOPICS, VERBS, COVERBS } from "@/data/verbs";
 import { POSTPOSITIONS, WORD_BUILDING } from "@/data/grammar";
-import { COLOURS, COUNTRIES, DAYS, GREETINGS, INTRODUCTIONS, MONTHS, NUMBERS, PHRASES } from "@/data/vocab";
+import {
+  COLOURS,
+  COUNTRIES,
+  DAYS,
+  GREETINGS,
+  INTRODUCTIONS,
+  MONTHS,
+  NUMBERS,
+  PHRASES,
+} from "@/data/vocab";
 import { NAV } from "@/data/nav";
 import { searchHits, type SearchHit } from "./search-core";
 
@@ -24,10 +33,13 @@ export function buildSearchIndex(): SearchHit[] {
     });
   }
   for (const c of CASES) {
+    // suffixes is ["—"] for the nominative (no ending) — join only real endings
+    // so the subtitle never doubles up on dashes.
+    const endings = c.suffixes.filter((s) => s !== "—").join(" / ");
     hits.push({
       href: `/cases/${c.id}`,
       title: `${c.headline} · ${c.name}`,
-      subtitle: `${c.huName}  ${c.suffixes.join(" / ")} — ${c.english}`,
+      subtitle: `${c.huName}${endings ? `  ${endings}` : ""} — ${c.english}. ${c.summary}`,
     });
   }
   for (const v of VERB_TOPICS) {

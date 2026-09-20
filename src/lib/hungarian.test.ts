@@ -52,9 +52,21 @@ describe("classifyHarmony", () => {
     assert.equal(r.class, "back");
   });
 
-  it("lets i sit out in a mixed stem (Budapest → front)", () => {
+  it("the final vowel wins even after several back vowels (Budapest → front)", () => {
     const r = classifyHarmony("Budapest");
     assert.equal(r.class, "front");
+  });
+
+  it("i/í sit out and let the stem's other vowel decide (segít → front)", () => {
+    const r = classifyHarmony("segít");
+    assert.equal(r.class, "front");
+  });
+
+  it("a word with no vowel is flagged, not misdiagnosed as an i/í stem", () => {
+    const r = classifyHarmony("brr");
+    assert.equal(r.vowels.length, 0);
+    assert.ok(r.caveat);
+    assert.doesNotMatch(r.caveat, /i\/í/);
   });
 
   it("normalizes NFC and is case-insensitive", () => {

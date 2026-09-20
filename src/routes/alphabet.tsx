@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { LETTERS, LOAN_LETTERS, SOUND_NOTES } from "@/data/alphabet";
@@ -18,6 +18,41 @@ export const Route = createFileRoute("/alphabet")({
 function AlphabetPage() {
   const [active, setActive] = useState(LETTERS[0].glyph);
   const letter = LETTERS.find((l) => l.glyph === active) ?? LETTERS[0];
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  // Exactly one letter is ever selected, so the grid is a radio group, not a
+  // set of independent toggles. Arrow keys move both selection and focus,
+  // matching how a native radio group behaves regardless of visual columns.
+  function moveTo(index: number) {
+    const next = LETTERS[(index + LETTERS.length) % LETTERS.length];
+    setActive(next.glyph);
+    buttonRefs.current[(index + LETTERS.length) % LETTERS.length]?.focus();
+  }
+
+  function onKeyDown(e: ReactKeyboardEvent<HTMLButtonElement>, index: number) {
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        e.preventDefault();
+        moveTo(index + 1);
+        break;
+      case "ArrowLeft":
+      case "ArrowUp":
+        e.preventDefault();
+        moveTo(index - 1);
+        break;
+      case "Home":
+        e.preventDefault();
+        moveTo(0);
+        break;
+      case "End":
+        e.preventDefault();
+        moveTo(LETTERS.length - 1);
+        break;
+      default:
+        break;
+    }
+  }
 
   return (
     <div>
@@ -29,12 +64,23 @@ function AlphabetPage() {
       />
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
         <div>
-          <div className="grid grid-cols-5 gap-1.5 sm:grid-cols-8">
-            {LETTERS.map((l) => (
+          <div
+            role="radiogroup"
+            aria-label="Alphabet letters"
+            className="grid grid-cols-5 gap-1.5 sm:grid-cols-8"
+          >
+            {LETTERS.map((l, index) => (
               <button
                 key={l.glyph}
+                ref={(el) => {
+                  buttonRefs.current[index] = el;
+                }}
+                type="button"
+                role="radio"
+                aria-checked={l.glyph === active}
+                tabIndex={l.glyph === active ? 0 : -1}
                 onClick={() => setActive(l.glyph)}
-                aria-pressed={l.glyph === active}
+                onKeyDown={(e) => onKeyDown(e, index)}
                 className={cn(
                   "flex min-h-12 flex-col items-center justify-center rounded-lg px-1 py-2",
                   l.glyph === active

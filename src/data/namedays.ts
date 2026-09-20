@@ -17,15 +17,16 @@ export const NEVNAP: string[][] = [
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 const BUDAPEST = "Europe/Budapest";
+const BUDAPEST_YMD_FORMAT = new Intl.DateTimeFormat("en-GB", {
+  timeZone: BUDAPEST,
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+});
 
 /** Calendar day in Hungary, not the visitor's local timezone. */
 export function budapestYmd(d: Date): { year: number; month: number; day: number } {
-  const parts = new Intl.DateTimeFormat("en-GB", {
-    timeZone: BUDAPEST,
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-  }).formatToParts(d);
+  const parts = BUDAPEST_YMD_FORMAT.formatToParts(d);
   const pick = (type: Intl.DateTimeFormatPartTypes) =>
     Number(parts.find((part) => part.type === type)?.value);
   return { year: pick("year"), month: pick("month"), day: pick("day") };

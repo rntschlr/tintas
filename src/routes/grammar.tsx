@@ -59,7 +59,7 @@ function GrammarPage() {
       <PageHeader
         id="grammar"
         kicker="The rest of the machine"
-        title="Syntax & extras"
+        title="Syntax"
         lead="van that disappears, plurals that refuse to double-count, word order that is really focus order, and postpositions with personal forms."
       />
       <Tabs defaultValue="van">

@@ -49,10 +49,12 @@ function HarmonyPage() {
               </div>
             </div>
             <p className="mt-4 border-t border-border pt-3 text-sm text-muted">
-              So in any three-column ending table, <Hu>autó</Hu> words read the{" "}
-              <span className="font-medium text-fg">back</span> column and <Hu>teniszütő</Hu> words
-              read <span className="font-medium text-fg">front</span> or{" "}
-              <span className="font-medium text-fg">rounded</span>. Hungarian calls the two camps{" "}
+              <Hu>teniszütő</Hu> is itself front <span className="italic">rounded</span> — ö/ő and
+              ü/ű are rounded vowels. So in a three-column table it reads the{" "}
+              <span className="font-medium text-fg">rounded</span> column, the same column as{" "}
+              <Hu>könyv</Hu> or <Hu>ül</Hu>. Only where a two-column table collapses front rounded
+              and front unrounded into one front bucket does <Hu>teniszütő</Hu> read{" "}
+              <span className="font-medium text-fg">front</span>. Hungarian calls the two main camps{" "}
               <Hu>mély</Hu> (deep) and <Hu>magas</Hu> (high); English grammars say back and front —
               same split, different name.
             </p>

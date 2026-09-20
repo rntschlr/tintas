@@ -58,7 +58,7 @@ function AboutPage() {
           <p className="mt-2 text-sm leading-relaxed text-muted">
             Released under CC BY-NC 4.0: copy it, adapt it, teach from it, as long as you credit{" "}
             {APP_NAME} and do not sell it. The full text is in{" "}
-            <a className="text-primary" href={`${REPO_URL}/blob/main/LICENSE`}>
+            <a className="text-primary" href={`${REPO_URL}/blob/main/LICENSE`} rel="noreferrer">
               LICENSE
             </a>{" "}
             in the repository.

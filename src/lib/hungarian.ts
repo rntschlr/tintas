@@ -46,17 +46,26 @@ export function classifyHarmony(word: string): {
   const w = word.toLowerCase().normalize("NFC").trim();
   const vowels = [...w].filter(
     (ch) =>
-      BACK.includes(ch) || FRONT_UNROUNDED.includes(ch) || FRONT_ROUNDED.includes(ch) || NEUTRAL.includes(ch),
+      BACK.includes(ch) ||
+      FRONT_UNROUNDED.includes(ch) ||
+      FRONT_ROUNDED.includes(ch) ||
+      NEUTRAL.includes(ch),
   );
+  const noVowel = vowels.length === 0;
   let cls = lastClassifying(w);
   let caveat: string | undefined;
   if (cls === "neutral" && vowels.length > 0) {
     const resolved = resolveNeutral(w);
     cls = resolved.cls;
     caveat = resolved.caveat;
+  } else if (noVowel) {
+    // No vowel at all (consonant cluster, or empty) is not an i/í-stem case —
+    // do not sell it as one. classifyHarmony has nothing to classify.
+    caveat = "No vowel found. Harmony needs at least one vowel to classify.";
   }
-  const label =
-    cls === "back"
+  const label = noVowel
+    ? "No vowel — nothing to classify"
+    : cls === "back"
       ? "Back — endings like -ban, -ok, -hoz"
       : cls === "rounded"
         ? "Front rounded — endings like -ben, -ök, -höz"
@@ -67,14 +76,16 @@ export function classifyHarmony(word: string): {
     class: cls,
     vowels,
     label,
-    twoFold:
-      cls === "neutral"
+    twoFold: noVowel
+      ? "—"
+      : cls === "neutral"
         ? "back or front — look the word up"
         : cls === "back"
           ? "back (-ban, -nak, -val)"
           : "front (-ben, -nek, -vel)",
-    threeFold:
-      cls === "neutral"
+    threeFold: noVowel
+      ? "—"
+      : cls === "neutral"
         ? "—"
         : cls === "back"
           ? "-ok / -hoz / -on"

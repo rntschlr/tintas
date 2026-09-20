@@ -168,8 +168,14 @@ export function pageHead(
       { name: "twitter:image", content: OG_IMAGE },
       { name: "twitter:image:alt", content: OG_IMAGE_ALT },
       {
-        // The router renders this as a single escaped <script type="application/ld+json">
-        // inside <head>. One per page: the /cases layout route returns {} when it is not
+        // Verified against @tanstack/router-core's shipped types (route.d.ts:
+        // `MetaDescriptor` includes `'script:ld+json': LdJsonObject`) and its
+        // renderer (headContentUtils.tsx special-cases this key, JSON.stringifies
+        // and HTML-escapes it into one <script type="application/ld+json"> in
+        // <head>). Typed and escaped by the router itself, not a guess — but
+        // scripts/production-smoke.mjs still asserts exactly one block per page
+        // in case a future router version drops the convention.
+        // One per page: the /cases layout route returns {} when it is not
         // the leaf match, so no second graph competes with the sheet's own.
         "script:ld+json": {
           "@context": "https://schema.org",
