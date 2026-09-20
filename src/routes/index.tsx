@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   component: Home,
-  head: () => pageHead(),
+  head: () => pageHead(undefined, undefined, "/", { kind: "home" }),
 });
 
 function sheetTarget(last: string | undefined) {
@@ -22,7 +22,7 @@ function sheetTarget(last: string | undefined) {
   if (last.startsWith("case-")) {
     const slug = last.slice(5);
     const cas = CASES.find((c) => c.id === slug);
-    if (cas) return { href: `/cases/${slug}`, label: cas.name };
+    if (cas) return { href: `/cases/${slug}`, label: cas.headline };
   }
   return null;
 }

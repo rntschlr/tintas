@@ -5,7 +5,17 @@ import { PageHeader, Paper } from "@/components/page";
 
 export const Route = createFileRoute("/adjectives")({
   component: AdjectivesPage,
-  head: ({ match }) => pageHead("Adjectives", "Comparatives, no agreement, and how Hungarian paints nouns.", match.pathname),
+  head: ({ match }) =>
+    pageHead(
+      "Adjectives",
+      "Comparatives, no agreement, and how Hungarian paints nouns.",
+      match.pathname,
+      {
+        kind: "lesson",
+        crumbs: [{ name: "Desk", path: "/" }],
+        teaches: "Hungarian adjectives and comparison",
+      },
+    ),
 });
 
 function AdjectivesPage() {

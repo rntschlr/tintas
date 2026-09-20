@@ -6,7 +6,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/phrases")({
   component: PhrasesPage,
-  head: ({ match }) => pageHead("How to say", "Hello, thank you, I love you, and the rest of the street.", match.pathname),
+  head: ({ match }) =>
+    pageHead(
+      "How to say",
+      "Hello, thank you, I love you, and the rest of the street.",
+      match.pathname,
+      {
+        kind: "lesson",
+        crumbs: [{ name: "Desk", path: "/" }],
+        teaches: "everyday Hungarian phrases",
+      },
+    ),
 });
 
 function PhrasesPage() {

@@ -22,16 +22,51 @@ describe("classifyHarmony", () => {
     assert.match(r.threeFold, /-ök/);
   });
 
-  it("treats i/í-only stems as neutral → back endings", () => {
-    const r = classifyHarmony("hid");
+  it("looks up víz as a front i-stem, not back", () => {
+    const r = classifyHarmony("víz");
+    assert.equal(r.class, "front");
+    assert.equal(r.caveat, undefined);
+    assert.match(r.twoFold, /front/);
+  });
+
+  it("looks up híd as a back i-stem", () => {
+    const r = classifyHarmony("híd");
+    assert.equal(r.class, "back");
+    assert.equal(r.caveat, undefined);
+  });
+
+  it("looks up szív as front and ír as back", () => {
+    assert.equal(classifyHarmony("szív").class, "front");
+    assert.equal(classifyHarmony("ír").class, "back");
+  });
+
+  it("refuses to guess an unknown i/í-only stem", () => {
+    const r = classifyHarmony("csíny");
     assert.equal(r.class, "neutral");
-    assert.match(r.twoFold, /back/);
+    assert.ok(r.caveat);
+    assert.match(r.twoFold, /look the word up/);
   });
 
   it("uses the last classifying vowel (virág → back)", () => {
-    // i is neutral; á is back — last classifying wins
     const r = classifyHarmony("virág");
     assert.equal(r.class, "back");
+  });
+
+  it("the final vowel wins even after several back vowels (Budapest → front)", () => {
+    const r = classifyHarmony("Budapest");
+    assert.equal(r.class, "front");
+  });
+
+  it("i/í sit out and let the stem's other vowel decide (segít → front)", () => {
+    const r = classifyHarmony("segít");
+    assert.equal(r.class, "front");
+  });
+
+  it("a word with no vowel is flagged, not misdiagnosed as an i/í stem", () => {
+    const r = classifyHarmony("brr");
+    assert.equal(r.vowels.length, 0);
+    assert.ok(r.caveat);
+    assert.doesNotMatch(r.caveat, /i\/í/);
   });
 
   it("normalizes NFC and is case-insensitive", () => {
@@ -54,7 +89,7 @@ describe("sampleSuffixes", () => {
     assert.equal(sampleSuffixes("front").find((x) => x.name === "allative")?.form, "-hez");
   });
 
-  it("treats neutral like back", () => {
-    assert.equal(sampleSuffixes("neutral").find((x) => x.name === "dative")?.form, "-nak");
+  it("does not invent endings for an unknown i-stem", () => {
+    assert.deepEqual(sampleSuffixes("neutral"), []);
   });
 });

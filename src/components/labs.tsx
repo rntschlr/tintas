@@ -8,7 +8,8 @@ import { Paper, Hu } from "@/components/page";
 import { cn } from "@/lib/utils";
 
 export function HarmonyLab({ compact = false }: { compact?: boolean }) {
-  const [word, setWord] = useState("Budapest");
+  const [word, setWord] = useState("ház");
+
   const result = classifyHarmony(word || "a");
   const suffixes = sampleSuffixes(result.class);
 
@@ -17,7 +18,7 @@ export function HarmonyLab({ compact = false }: { compact?: boolean }) {
       <p className="text-xs font-medium tracking-[0.16em] text-primary uppercase">Harmony bench</p>
       <h2 className="mt-1 font-display text-2xl font-semibold">Type a word</h2>
       <p className="mt-1 text-sm text-muted">
-        Last classifying vowel wins. i/í stay out of the fight unless they are alone.
+        Last classifying vowel wins. i/í sit out in mixed words; alone, the stem decides.
       </p>
       <Input
         className="mt-4 font-serif text-lg"
@@ -31,7 +32,8 @@ export function HarmonyLab({ compact = false }: { compact?: boolean }) {
         <Badge>{result.label}</Badge>
         <Badge variant="muted">vowels {result.vowels.join(" · ") || "—"}</Badge>
       </div>
-      {!compact ? (
+      {result.caveat ? <p className="mt-3 text-sm text-muted">{result.caveat}</p> : null}
+      {!compact && suffixes.length ? (
         <ul className="mt-4 grid gap-2 sm:grid-cols-2">
           {suffixes.map((s) => (
             <li key={s.name} className="rounded-lg bg-bg-elevated px-3 py-2 text-sm">
@@ -40,6 +42,18 @@ export function HarmonyLab({ compact = false }: { compact?: boolean }) {
             </li>
           ))}
         </ul>
+      ) : null}
+      {!compact && result.caveat ? (
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-lg bg-bg-elevated px-3 py-2 text-sm">
+            <p className="text-xs tracking-wide text-muted uppercase">If back · híd</p>
+            <p className="mt-1 font-serif text-fg">-ban · -nak · -hoz · -ok</p>
+          </div>
+          <div className="rounded-lg bg-bg-elevated px-3 py-2 text-sm">
+            <p className="text-xs tracking-wide text-muted uppercase">If front · víz</p>
+            <p className="mt-1 font-serif text-fg">-ben · -nek · -hez · -ek</p>
+          </div>
+        </div>
       ) : null}
     </Paper>
   );

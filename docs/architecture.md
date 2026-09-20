@@ -41,7 +41,9 @@ The full launch sequence, domain settings, and post-deployment checks are in [De
 
 ## Server behavior
 
-`server/middleware/00-security.ts` applies response headers to server-rendered responses; `public/_headers` covers static assets. Keeping both is intentional because Cloudflare Pages Functions responses do not inherit static-file headers. The scoped content security policy restricts object loading and base URLs; it is not a comprehensive script-execution policy.
+`server/middleware/00-security.ts` applies response headers to server-rendered responses; `public/_headers` covers static assets. Keeping both is intentional because Cloudflare Pages Functions responses do not inherit static-file headers. The two lists are hand-synced and kept in the same order so drift shows in a diff. The scoped content security policy restricts object loading and base URLs; it is not a comprehensive script-execution policy.
+
+`Strict-Transport-Security` is set to `max-age=31536000; includeSubDomains` with no `preload` directive. Preloading is effectively irreversible, and `includeSubDomains` applies the policy to the apex and every subdomain of `tintas.app` unconditionally, for as long as a visiting browser remembers it (up to the max-age) — regardless of what apex or `www` serve later. Audit all existing and any planned subdomains for HTTPS-only support before deploying a change to this header; a subdomain that cannot do HTTPS would be force-upgraded and broken for returning visitors.
 
 `GET /health` returns HTTP 200 with `{"status":"ok","service":"tinta"}` and `Cache-Control: no-store`. It exposes no credentials or user data and reports process liveness only; the public app has no database readiness dependency.
 

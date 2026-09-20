@@ -1,17 +1,29 @@
 export type Triad = "space" | "surface" | "proximity";
 export type TriadRole = "goal" | "position" | "source";
 
+export type Example = { hu: string; en: string };
+
+/** Two forms that learners reach for interchangeably, and the line between them. */
+export type Contrast = { a: Example; b: Example; note: string };
+
 export type NounCase = {
   id: string;
   name: string;
   huName: string;
   suffixes: string[];
   english: string;
+  /** The English job, used as the page H1. The suffixes stay out of it. */
+  headline: string;
   triad?: Triad;
   role?: TriadRole;
   summary: string;
+  /** One short paragraph: what the ending does, in plain English. */
+  rule: string;
+  /** The case learners reach for by mistake, and why this is not it. */
+  notWhen: string;
+  contrast?: Contrast;
   notes: string[];
-  examples: { hu: string; en: string }[];
+  examples: Example[];
 };
 
 export const CASES: NounCase[] = [
@@ -21,7 +33,16 @@ export const CASES: NounCase[] = [
     huName: "alanyeset",
     suffixes: ["—"],
     english: "subject / dictionary form",
+    headline: "The dictionary form",
     summary: "The bare stem. Subjects, predicate nouns, and the form you look up.",
+    rule: "No ending at all. The nominative is the bare stem: the subject of a sentence, the word after ‘this is’, and the form you look up in a dictionary. Every other case on this desk is built on top of it.",
+    notWhen:
+      "Not for the thing a verb acts on. That takes the accusative -t: ‘I see the house’ is Látom a házat, never Látom a ház.",
+    contrast: {
+      a: { hu: "A ház nagy.", en: "The house is big." },
+      b: { hu: "Látom a házat.", en: "I see the house." },
+      note: "The subject stays bare; the object takes -t.",
+    },
     notes: [
       "A ház nagy — the house is big. No suffix, no article required for the grammar.",
       "After numbers and quantity words the noun stays nominative singular: három ház, sok ember.",
@@ -29,6 +50,9 @@ export const CASES: NounCase[] = [
     examples: [
       { hu: "A lány olvas.", en: "The girl is reading." },
       { hu: "Ez egy ház.", en: "This is a house." },
+      { hu: "Péter tanár.", en: "Péter is a teacher." },
+      { hu: "Három ház áll itt.", en: "Three houses stand here." },
+      { hu: "Sok ember vár.", en: "A lot of people are waiting." },
     ],
   },
   {
@@ -37,17 +61,28 @@ export const CASES: NounCase[] = [
     huName: "tárgyeset",
     suffixes: ["-t", "-ot", "-at", "-et", "-öt"],
     english: "direct object",
+    headline: "The thing you act on",
     summary: "Marks the thing the verb acts on. English hides this; Hungarian never does.",
+    rule: "Hungarian glues -t onto the direct object. English works out who does what from word order, so it cannot move words around freely; Hungarian marks the object on the noun itself, which is exactly why its word order can move.",
+    notWhen:
+      "Not on the subject, however long the sentence gets. After a number the noun still takes -t but stays singular: három házat, not három házakat.",
+    contrast: {
+      a: { hu: "A kutya látja a macskát.", en: "The dog sees the cat." },
+      b: { hu: "A macskát látja a kutya.", en: "The dog sees the cat." },
+      note: "Same grammatical roles either way — the -t, not the position, says who is being seen. Fronting the object like this shifts emphasis onto the cat, the way stress would in English.",
+    },
     notes: [
       "After a vowel, just -t: kávét, autót.",
       "After l, r, n, ny, j, ly you can usually add -t directly: lányt, kért.",
-      "Otherwise a linking vowel: házat, könyt? → könyvet, ablakot.",
+      "Otherwise a linking vowel: házat, könyvet, ablakot.",
       "Final -a/-e lengthen: kutya → kutyát, eke → ekét.",
     ],
     examples: [
       { hu: "Látom a házat.", en: "I see the house." },
       { hu: "Kérek egy sört.", en: "I’d like a beer." },
       { hu: "Szeretem a kutyámat.", en: "I love my dog." },
+      { hu: "Megettem a levest.", en: "I ate the soup." },
+      { hu: "Olvasod a könyvet?", en: "Are you reading the book?" },
     ],
   },
   {
@@ -56,7 +91,16 @@ export const CASES: NounCase[] = [
     huName: "részeshatározó",
     suffixes: ["-nak", "-nek"],
     english: "to / for (recipient)",
+    headline: "To, for someone",
     summary: "The person who gets something, or the ‘to’ of giving, telling, belonging.",
+    rule: "-nak/-nek marks the person on the receiving end: who you give to, tell, show, or buy for. It also builds the possessive when you want to put weight on the owner.",
+    notWhen:
+      "Not for ‘for the sake of’ — that is -ért. And not needed for a plain possessive: Péter háza already means ‘Péter’s house’ with the owner left bare.",
+    contrast: {
+      a: { hu: "Péter háza", en: "Péter’s house" },
+      b: { hu: "Péternek a háza", en: "Péter’s house (the owner stressed)" },
+      note: "Bare possessor is the everyday form; -nek fronts and emphasises it.",
+    },
     notes: [
       "Adok a lánynak egy könyvet — I give the girl a book.",
       "Also the attributive possessor: a lánynak a könyve — the girl’s book.",
@@ -65,6 +109,9 @@ export const CASES: NounCase[] = [
     examples: [
       { hu: "Mondom Péternek.", en: "I tell Péter." },
       { hu: "Ez a kutyának a háza.", en: "This is the dog’s house." },
+      { hu: "Adok a lánynak egy könyvet.", en: "I give the girl a book." },
+      { hu: "Vettem neked virágot.", en: "I bought you flowers." },
+      { hu: "Segítek a szomszédnak.", en: "I help the neighbour." },
     ],
   },
   {
@@ -73,7 +120,16 @@ export const CASES: NounCase[] = [
     huName: "eszközhatározó",
     suffixes: ["-val", "-vel"],
     english: "with / by means of",
+    headline: "With, by means of",
     summary: "Company or the tool you use. The v- assimilates to a preceding consonant.",
+    rule: "-val/-vel covers both senses of English ‘with’: the company you keep and the tool you use. Its v is unstable — after a consonant it vanishes and doubles that consonant instead.",
+    notWhen:
+      "Not for ‘with’ meaning ‘having’. A man with a beard is szakállas ember — an adjective built from the noun, not -val.",
+    contrast: {
+      a: { hu: "kutyával", en: "with a dog" },
+      b: { hu: "házzal", en: "with a house" },
+      note: "A vowel keeps the v; a consonant swallows it and doubles itself.",
+    },
     notes: [
       "After a vowel: kutyával, kávéval.",
       "After a consonant the v copies that consonant: házzal, könyvvel, busszal, késsel.",
@@ -82,6 +138,9 @@ export const CASES: NounCase[] = [
     examples: [
       { hu: "A barátommal megyek.", en: "I’m going with my friend." },
       { hu: "Tollal írok.", en: "I write with a pen." },
+      { hu: "Busszal jövök.", en: "I come by bus." },
+      { hu: "Késsel vágom a kenyeret.", en: "I cut the bread with a knife." },
+      { hu: "Beszélek az orvossal.", en: "I’m speaking with the doctor." },
     ],
   },
   {
@@ -90,15 +149,27 @@ export const CASES: NounCase[] = [
     huName: "ok-célhatározó",
     suffixes: ["-ért"],
     english: "for (purpose or cause)",
+    headline: "For the purpose of",
     summary: "The reason you act, or the thing you go to fetch. One form for every harmony class.",
+    rule: "-ért is the reason or the errand: what you are grateful for, what you fight for, what you leave the house to collect. One form, no harmony pair to remember.",
+    notWhen:
+      "Not for a recipient. ‘I bought it for you’ is neked — dative. -ért means ‘for the sake of’ or ‘to fetch’, never ‘to hand to’.",
+    contrast: {
+      a: { hu: "Vettem neked virágot.", en: "I bought you flowers." },
+      b: { hu: "Virágért megyek.", en: "I’m going out for flowers." },
+      note: "The dative gives; -ért fetches.",
+    },
     notes: [
       "One-fold ending: always -ért.",
       "A gyerekért megyek — I’m going to pick up the child.",
-      "Köszönöm a segítségért — thank you for the help.",
+      "Hálás vagyok a segítségért — grateful for the help.",
     ],
     examples: [
       { hu: "Virágért megyek.", en: "I’m going for flowers." },
       { hu: "Harcolok a szabadságért.", en: "I fight for freedom." },
+      { hu: "Hálás vagyok a segítségért.", en: "I’m grateful for the help." },
+      { hu: "A gyerekért megyek.", en: "I’m going to pick up the child." },
+      { hu: "Mindent megtennék érted.", en: "I’d do anything for you." },
     ],
   },
   {
@@ -107,15 +178,27 @@ export const CASES: NounCase[] = [
     huName: "transzlatívusz",
     suffixes: ["-vá", "-vé"],
     english: "into (a change of state)",
+    headline: "Turning into something",
     summary: "Becoming something. Same v-assimilation as the instrumental.",
+    rule: "-vá/-vé is the ending of transformation: what a thing turns into. It behaves like the instrumental, so after a consonant the v disappears and doubles that consonant.",
+    notWhen:
+      "Not for motion into a place — that is -ba/-be. Békává változott is ‘turned into a frog’; békába would mean moving inside one.",
+    contrast: {
+      a: { hu: "A szobába ment.", en: "He went into the room." },
+      b: { hu: "Békává változott.", en: "He turned into a frog." },
+      note: "-ba is a destination; -vá is a new state.",
+    },
     notes: [
       "Jéggé válik — it turns into ice.",
       "Orvossá lett — he became a doctor.",
-      "Back: -vá. Front: -vé. After consonant: vízzé, tanárrá.",
+      "Back: -vá. Front: -vé. After a consonant: vízzé, tanárrá.",
     ],
     examples: [
       { hu: "A herceg békává változott.", en: "The prince turned into a frog." },
-      { hu: "Poronddá omlott.", en: "It crumbled to dust." },
+      { hu: "Orvossá lett.", en: "He became a doctor." },
+      { hu: "A víz jéggé fagyott.", en: "The water froze into ice." },
+      { hu: "Tanárrá képezték.", en: "They trained him to be a teacher." },
+      { hu: "Porrá omlott.", en: "It crumbled to dust." },
     ],
   },
   {
@@ -124,13 +207,24 @@ export const CASES: NounCase[] = [
     huName: "terminatívusz",
     suffixes: ["-ig"],
     english: "until / as far as",
+    headline: "As far as, until",
     summary: "The endpoint in time or space. One-fold, like -ért.",
+    rule: "-ig draws a line and stops there: until five o’clock, as far as the bridge, for a stretch of two hours. One form for every noun.",
+    notWhen: "Not for a single moment — that is -kor. Ötkor is ‘at five’; ötig is ‘until five’.",
+    contrast: {
+      a: { hu: "Ötkor dolgozom.", en: "I start work at five." },
+      b: { hu: "Ötig dolgozom.", en: "I work until five." },
+      note: "-kor is a point on the clock; -ig is everything up to it.",
+    },
     notes: [
       "Ötig dolgozom — I work until five.",
       "A hídig sétálunk — we walk as far as the bridge.",
     ],
     examples: [
       { hu: "Holnapig várok.", en: "I’ll wait until tomorrow." },
+      { hu: "A hídig sétálunk.", en: "We walk as far as the bridge." },
+      { hu: "Hétfőtől péntekig dolgozom.", en: "I work from Monday to Friday." },
+      { hu: "Két óráig olvastam.", en: "I read for two hours." },
       { hu: "A Duna-partig megyünk.", en: "We’re going as far as the Danube bank." },
     ],
   },
@@ -140,14 +234,26 @@ export const CASES: NounCase[] = [
     huName: "temporálisz",
     suffixes: ["-kor"],
     english: "at (a time)",
+    headline: "At a clock time",
     summary: "Clocks, holidays, named moments. Not for spans — those use -ban/-ben or -ig.",
+    rule: "-kor pins an event to a named moment: a clock time, a holiday, midnight. It never harmonises and never takes an article.",
+    notWhen:
+      "Not for months, years or seasons. Those take -ban/-ben (januárban, 2026-ban) or a bare adverb (nyáron). Not for a span either — that is -ig.",
+    contrast: {
+      a: { hu: "Ötkor találkozunk.", en: "We meet at five." },
+      b: { hu: "Januárban találkozunk.", en: "We meet in January." },
+      note: "Clock moments take -kor; months take -ban/-ben.",
+    },
     notes: [
       "Ötkor — at five. Karácsonykor — at Christmas. Éjfélkor — at midnight.",
       "Does not take an article: ötkor, not az ötkor.",
     ],
     examples: [
       { hu: "Hétkor találkozunk.", en: "We meet at seven." },
+      { hu: "Karácsonykor hazamegyek.", en: "At Christmas I go home." },
+      { hu: "Éjfélkor csendes a város.", en: "At midnight the city is quiet." },
       { hu: "Szilveszterkor táncolunk.", en: "We dance at New Year’s Eve." },
+      { hu: "Mikor? Fél nyolckor.", en: "When? At half past seven." },
     ],
   },
   {
@@ -156,17 +262,29 @@ export const CASES: NounCase[] = [
     huName: "illatívusz",
     suffixes: ["-ba", "-be"],
     english: "into",
+    headline: "Into the house",
     triad: "space",
     role: "goal",
     summary: "Motion into an interior — a room, a city abroad, a party, a language.",
+    rule: "-ba/-be is motion into an interior: a room, a box, a party, a foreign city or country. It answers hová? — where to?",
+    notWhen:
+      "Not for Hungarian towns or Hungary itself. Those take the surface triad, so Budapestre and Magyarországra, never Budapestbe.",
+    contrast: {
+      a: { hu: "Párizsba utazunk.", en: "We’re travelling to Paris." },
+      b: { hu: "Pécsre utazunk.", en: "We’re travelling to Pécs." },
+      note: "Foreign places you go into; Hungarian places you go onto.",
+    },
     notes: [
       "A házba megyek — I go into the house.",
-      "Angolba? No — foreign cities/countries use this triad: Londonba, Németországba.",
+      "Foreign cities and countries use this triad: Londonba, Németországba.",
       "Hungarian cities use the surface triad instead: Budapestre.",
     ],
     examples: [
       { hu: "Bemegyek a szobába.", en: "I go into the room." },
       { hu: "Párizsba utazunk.", en: "We’re travelling to Paris." },
+      { hu: "Tedd a dobozba.", en: "Put it into the box." },
+      { hu: "Németországba költözött.", en: "She moved to Germany." },
+      { hu: "Elmegyünk a buliba.", en: "We’re going to the party." },
     ],
   },
   {
@@ -175,16 +293,32 @@ export const CASES: NounCase[] = [
     huName: "inesszívusz",
     suffixes: ["-ban", "-ben"],
     english: "in",
+    headline: "In the house",
     triad: "space",
     role: "position",
     summary: "Being inside. Time-of-year and many abstract ‘in’s live here too.",
+    rule: "-ban/-ben is being inside something: a room, a building, a foreign country, a month, a year. It answers hol? — where at? Most abstract English ‘in’s land here as well.",
+    notWhen:
+      "Not for Hungarian settlements, which take the surface ending: Budapesten, Szegeden, Pécsen. Not for clock times either — those take -kor.",
+    contrast: {
+      a: { hu: "a házban", en: "in the house" },
+      b: { hu: "Budapesten", en: "in Budapest" },
+      note: "Interiors take -ban/-ben; Hungarian towns take -n/-on/-en/-ön instead.",
+    },
     notes: [
       "A házban vagyok — I am in the house.",
-      "Januárban, 2026-ban, magyarul? Wait — languages take -ul/-ül. Months take -ban/-ben.",
+      "Months and years take -ban/-ben: januárban, 2026-ban.",
+      "Languages are the exception: magyarul, not magyarban.",
     ],
     examples: [
-      { hu: "Budapesten lakom, de a házban olvasok.", en: "I live in Budapest, but I read in the house." },
+      { hu: "A házban vagyok.", en: "I am in the house." },
+      {
+        hu: "Budapesten lakom, de a házban olvasok.",
+        en: "I live in Budapest, but I read in the house.",
+      },
       { hu: "Nyáron a kertben ülünk.", en: "In summer we sit in the garden." },
+      { hu: "Januárban hideg van.", en: "In January it is cold." },
+      { hu: "2026-ban kezdtük.", en: "We started in 2026." },
     ],
   },
   {
@@ -193,9 +327,18 @@ export const CASES: NounCase[] = [
     huName: "elatívusz",
     suffixes: ["-ból", "-ből"],
     english: "out of",
+    headline: "Out of the house",
     triad: "space",
     role: "source",
     summary: "Motion out of an interior, or ‘made of’, or origin from a country/city abroad.",
+    rule: "-ból/-ből is motion out of an interior. It doubles as the ‘made of’ ending and as origin from a foreign place. It answers honnan? — where from?",
+    notWhen:
+      "Not from a person — that is -tól/-től. Not from a Hungarian town either, which takes -ról/-ről: Budapestről.",
+    contrast: {
+      a: { hu: "Londonból jövök.", en: "I come from London." },
+      b: { hu: "Budapestről jövök.", en: "I come from Budapest." },
+      note: "You come out of a foreign city and off a Hungarian one.",
+    },
     notes: [
       "A házból jövök — I come out of the house.",
       "Fából van — it’s made of wood.",
@@ -203,7 +346,10 @@ export const CASES: NounCase[] = [
     ],
     examples: [
       { hu: "Kilépett a szobából.", en: "She stepped out of the room." },
+      { hu: "A házból jövök.", en: "I’m coming out of the house." },
       { hu: "Aranyból készült.", en: "It was made of gold." },
+      { hu: "Fából van.", en: "It’s made of wood." },
+      { hu: "Olaszországból hoztuk.", en: "We brought it from Italy." },
     ],
   },
   {
@@ -212,17 +358,29 @@ export const CASES: NounCase[] = [
     huName: "szublatívusz",
     suffixes: ["-ra", "-re"],
     english: "onto / to (a surface or Hungarian place)",
+    headline: "Onto the table",
     triad: "surface",
     role: "goal",
     summary: "Motion onto a surface — and, by convention, to Hungarian towns and Hungary itself.",
+    rule: "-ra/-re is motion onto a surface, and by long convention motion to Hungarian towns and to Hungary. It is the hová? of the surface triad.",
+    notWhen:
+      "Not for a building you will be inside. Iskolába megyek — I go to school — takes the interior ending, because you end up in the building.",
+    contrast: {
+      a: { hu: "Budapestre megyek.", en: "I’m going to Budapest." },
+      b: { hu: "Londonba megyek.", en: "I’m going to London." },
+      note: "Hungarian destinations sit on the map; foreign ones go into it.",
+    },
     notes: [
       "Az asztalra teszem — I put it onto the table.",
       "Budapestre megyek, Magyarországra utazom.",
-      "Also ‘for a purpose of attending’: iskolára? More often iskolába. Islands of idiom exist.",
+      "Idiom decides the edge cases: iskolába, but a mérkőzésre.",
     ],
     examples: [
-      { hu: "Ülj az székre.", en: "Sit down onto the chair." },
+      { hu: "Az asztalra teszem.", en: "I put it onto the table." },
+      { hu: "Ülj a székre.", en: "Sit down on the chair." },
       { hu: "Pécsre megyünk.", en: "We’re going to Pécs." },
+      { hu: "Magyarországra utazom.", en: "I’m travelling to Hungary." },
+      { hu: "Felmentünk a tetőre.", en: "We went up onto the roof." },
     ],
   },
   {
@@ -231,9 +389,18 @@ export const CASES: NounCase[] = [
     huName: "szuperesszívusz",
     suffixes: ["-n", "-on", "-en", "-ön"],
     english: "on",
+    headline: "On the table",
     triad: "surface",
     role: "position",
     summary: "Being on a surface. Hungarian settlements live here: Budapesten.",
+    rule: "-n, with a linking vowel where the stem needs one, is being on a surface. Hungarian settlements live here too, which is why you live on Budapest rather than in it.",
+    notWhen:
+      "Not for interiors: a szobában vagyok, never a szobán. Foreign countries keep the interior ending — Németországban, but Magyarországon.",
+    contrast: {
+      a: { hu: "az asztalon", en: "on the table" },
+      b: { hu: "a fiókban", en: "in the drawer" },
+      note: "Surfaces take -n; interiors take -ban/-ben.",
+    },
     notes: [
       "After a vowel: -n (kutyán, Budán).",
       "Otherwise a linking vowel matching harmony: asztalon, kézen, körön.",
@@ -242,6 +409,9 @@ export const CASES: NounCase[] = [
     examples: [
       { hu: "A könyv az asztalon van.", en: "The book is on the table." },
       { hu: "Szegeden tanultam.", en: "I studied in Szeged." },
+      { hu: "Budapesten lakom.", en: "I live in Budapest." },
+      { hu: "A képen egy ház látható.", en: "A house can be seen in the picture." },
+      { hu: "Magyarországon élünk.", en: "We live in Hungary." },
     ],
   },
   {
@@ -250,15 +420,27 @@ export const CASES: NounCase[] = [
     huName: "delatívusz",
     suffixes: ["-ról", "-ről"],
     english: "off / from (a surface) / about",
+    headline: "Off the table",
     triad: "surface",
     role: "source",
     summary: "Down from a surface, away from a Hungarian town — and the ‘about’ of topics.",
+    rule: "-ról/-ről takes something down off a surface or away from a Hungarian town. It is also the ‘about’ of talking, thinking and writing.",
+    notWhen:
+      "Not out of an interior (-ból/-ből) and not away from a person (-tól/-től). Pétertől hallottam is ‘I heard it from Péter’; Péterről hallottam is ‘I heard about Péter’.",
+    contrast: {
+      a: { hu: "Pétertől hallottam.", en: "I heard it from Péter." },
+      b: { hu: "Péterről hallottam.", en: "I heard about Péter." },
+      note: "-tól is the source of the news; -ról is its subject.",
+    },
     notes: [
       "Az asztalról — off the table. Budapestről jövök — I come from Budapest.",
       "A filmről beszélek — I’m talking about the film.",
     ],
     examples: [
       { hu: "Leesett a tetőről.", en: "It fell off the roof." },
+      { hu: "Az asztalról vettem el.", en: "I took it off the table." },
+      { hu: "Budapestről jövök.", en: "I’m coming from Budapest." },
+      { hu: "A filmről beszélek.", en: "I’m talking about the film." },
       { hu: "Erről a könyvről van szó.", en: "This is about this book." },
     ],
   },
@@ -268,16 +450,28 @@ export const CASES: NounCase[] = [
     huName: "allatívusz",
     suffixes: ["-hoz", "-hez", "-höz"],
     english: "to (next to) / towards",
+    headline: "Up to the doctor",
     triad: "proximity",
     role: "goal",
     summary: "Motion to the vicinity of something. Three-fold harmony.",
+    rule: "-hoz/-hez/-höz is motion up to a person or a solid object — beside it, not inside it. It is the only triad ending with a three-way harmony split.",
+    notWhen:
+      "Not for going inside. Az orvoshoz megyek is ‘I’m going to the doctor’s’; a kórházba megyek is ‘I’m going into the hospital’.",
+    contrast: {
+      a: { hu: "az ablakhoz", en: "over to the window" },
+      b: { hu: "az ablakba", en: "into the window opening" },
+      note: "-hoz stops beside it; -ba goes inside.",
+    },
     notes: [
       "Back: -hoz (házhoz). Front unrounded: -hez (emberhez). Front rounded: -höz (körhöz).",
       "Az orvoshoz megyek — I’m going to the doctor’s.",
     ],
     examples: [
       { hu: "Odamegyek az ablakhoz.", en: "I go over to the window." },
+      { hu: "Az orvoshoz megyek.", en: "I’m going to the doctor’s." },
       { hu: "A falhoz állt.", en: "He stood up against the wall." },
+      { hu: "Gyere hozzám.", en: "Come over to my place." },
+      { hu: "A könyvhöz nyúlt.", en: "She reached for the book." },
     ],
   },
   {
@@ -286,17 +480,29 @@ export const CASES: NounCase[] = [
     huName: "adesszívusz",
     suffixes: ["-nál", "-nél"],
     english: "at / by",
+    headline: "At the doctor",
     triad: "proximity",
     role: "position",
     summary: "Being at someone’s place, or by an object. The Hungarian ‘chez’.",
+    rule: "-nál/-nél is being at someone’s place or beside an object — Hungarian’s chez. It also builds comparisons: bigger than, older than.",
+    notWhen:
+      "Not for being inside. A barátomnál vagyok is ‘I’m at my friend’s’; a szobában vagyok is ‘I’m in the room’.",
+    contrast: {
+      a: { hu: "Az ablaknál ül.", en: "She sits by the window." },
+      b: { hu: "Az ablakban ül.", en: "She sits in the window." },
+      note: "-nál is beside it; -ban is inside the frame.",
+    },
     notes: [
       "A barátomnál vagyok — I’m at my friend’s.",
       "Az ablaknál ül — she sits by the window.",
       "Used in comparisons: nagyobb a testvérénél — bigger than her sibling.",
     ],
     examples: [
-      { hu: "Annál a kávézónál találkozunk.", en: "We’ll meet at that café." },
+      { hu: "A barátomnál vagyok.", en: "I’m at my friend’s." },
+      { hu: "Az ablaknál ül.", en: "She sits by the window." },
       { hu: "Nálam van a kulcs.", en: "I have the key on me." },
+      { hu: "Annál a kávézónál találkozunk.", en: "We’ll meet at that café." },
+      { hu: "Nagyobb a testvérénél.", en: "He is bigger than his sibling." },
     ],
   },
   {
@@ -305,16 +511,27 @@ export const CASES: NounCase[] = [
     huName: "ablatívusz",
     suffixes: ["-tól", "-től"],
     english: "from (a person or vicinity)",
+    headline: "Away from the doctor",
     triad: "proximity",
     role: "source",
     summary: "Away from a person, a solid, a starting point in time.",
+    rule: "-tól/-től moves away from a person, a solid object, or a starting point in time. It is also the ‘from’ of receiving and the ‘of’ of being afraid.",
+    notWhen: "Not ‘about’ — that is -ról/-ről — and not out of an interior, which is -ból/-ből.",
+    contrast: {
+      a: { hu: "a háztól", en: "away from the house" },
+      b: { hu: "a házból", en: "out of the house" },
+      note: "-tól leaves the vicinity; -ból leaves the inside.",
+    },
     notes: [
       "A barátomtól kaptam — I got it from my friend.",
       "Hétfőtől péntekig — from Monday to Friday.",
     ],
     examples: [
+      { hu: "A barátomtól kaptam.", en: "I got it from my friend." },
       { hu: "Eljöttem az orvostól.", en: "I came from the doctor’s." },
+      { hu: "Hétfőtől péntekig dolgozom.", en: "I work from Monday to Friday." },
       { hu: "A faltól két méterre áll.", en: "It stands two metres from the wall." },
+      { hu: "Félek a kutyáktól.", en: "I’m afraid of dogs." },
     ],
   },
   {
@@ -323,15 +540,31 @@ export const CASES: NounCase[] = [
     huName: "birtokos jelző -é",
     suffixes: ["-é", "-éi"],
     english: "the one belonging to…",
-    summary: "Not the English ’s on the possessor of a named noun — that is -nak/-nek + possessive. -é stands in for a missing possessed thing.",
+    headline: "Whose it is",
+    summary:
+      "Not the English ’s on the possessor of a named noun — that is -nak/-nek + possessive. -é stands in for a missing possessed thing.",
+    rule: "-é stands in for a possessed thing that has been left out of the sentence. It is not the everyday possessive: Péter háza already means ‘Péter’s house’. Reach for -é only when the thing itself is missing.",
+    notWhen:
+      "Not when the possessed noun is named. ‘Péter’s house’ is Péter háza; a Péteré means ‘Péter’s one’, with the house understood from context.",
+    contrast: {
+      a: { hu: "Péter háza", en: "Péter’s house" },
+      b: { hu: "A ház a Péteré.", en: "The house is Péter’s." },
+      note: "Name the thing and the owner stays bare; drop it and -é fills the gap.",
+    },
     notes: [
       "Ez a ház a Péteré — this house is Péter’s (one).",
       "Plural possessed: a Péteréi — Péter’s ones.",
       "Contrast: Péter háza — Péter’s house (the house is named).",
     ],
     examples: [
-      { hu: "Melyik autó a tiéd? Az a piros a Péteré.", en: "Which car is yours? That red one is Péter’s." },
+      { hu: "Ez a ház a Péteré.", en: "This house is Péter’s." },
+      {
+        hu: "Melyik autó a tiéd? Az a piros a Péteré.",
+        en: "Which car is yours? That red one is Péter’s.",
+      },
       { hu: "A gyerekeké a jövő.", en: "The future is the children’s." },
+      { hu: "Ezek a könyvek a tanáréi.", en: "These books are the teacher’s." },
+      { hu: "Kié ez a kabát?", en: "Whose coat is this?" },
     ],
   },
 ];

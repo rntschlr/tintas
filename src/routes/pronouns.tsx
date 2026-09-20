@@ -5,7 +5,12 @@ import { PageHeader, Paper } from "@/components/page";
 
 export const Route = createFileRoute("/pronouns")({
   component: PronounsPage,
-  head: ({ match }) => pageHead("Pronouns", "Drop them, case them, and the -lak/-lek form.", match.pathname),
+  head: ({ match }) =>
+    pageHead("Pronouns", "Drop them, case them, and the -lak/-lek form.", match.pathname, {
+      kind: "lesson",
+      crumbs: [{ name: "Desk", path: "/" }],
+      teaches: "Hungarian pronouns",
+    }),
 });
 
 function PronounsPage() {

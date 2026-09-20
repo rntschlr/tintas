@@ -28,6 +28,25 @@ The workflow builds standalone mode with auth disabled. Private platform preview
 
 Progress stored on the old hostname will not automatically move to the new one: browser localStorage is isolated by origin. No server-side progress copy exists.
 
+### Enforce HTTPS in the Cloudflare zone
+
+The `Strict-Transport-Security` response header only helps a browser that already reached the site over HTTPS. What enforces the upgrade for the first request is the zone configuration, so set it in the dashboard for `tintas.app`, in this order:
+
+1. **SSL/TLS → Overview** → encryption mode **Full (strict)**.
+2. **SSL/TLS → Edge Certificates** → **Always Use HTTPS: On**.
+3. **SSL/TLS → Edge Certificates** → **Automatic HTTPS Rewrites: On**.
+4. Confirm the Universal certificate is Active and covers `tintas.app` **and** `www.tintas.app`.
+5. Verify both hostnames before going further:
+
+   ```bash
+   curl -sI  https://tintas.app/     | grep -i strict-transport
+   curl -sIL https://www.tintas.app/ | grep -i strict-transport
+   ```
+
+6. Only once both are clean, **SSL/TLS → Edge Certificates → HSTS → Enable**: max-age 12 months, **Apply HSTS Policy to subdomains: on**, **No-Sniff: on**, **Preload: off**.
+
+Do not submit the domain to [hstspreload.org](https://hstspreload.org). Preloading is baked into browser binaries and is slow and awkward to undo; the header plus the zone setting already cover every returning visitor.
+
 Cloudflare references: [custom domains](https://developers.cloudflare.com/pages/configuration/custom-domains/), [Direct Upload with CI](https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/), [redirecting pages.dev](https://developers.cloudflare.com/pages/how-to/redirect-to-custom-domain/).
 
 For any future `.hu` domain, registration approval and DNS delegation must be checked separately. The registry's eight-day publication period does not itself prevent a conditionally registered domain from being used. See the [official `.hu` registration process](https://www.domain.hu/egy-domain-regisztralasanak-folyamata/).
@@ -37,7 +56,8 @@ For any future `.hu` domain, registration approval and DNS delegation must be ch
 - `/health` returns HTTP 200 and `{"status":"ok","service":"tinta"}` with `Cache-Control: no-store`. It is a liveness check, not a database or external-service readiness check.
 - `/`, `/practice`, and a case-detail URL load on a direct visit and a refresh.
 - `/robots.txt`, `/sitemap.xml`, canonical links, and `og:image` all use the chosen production origin.
-- Inspect an HTML response for `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, and the limited CSP restricting objects and base URLs. The CSP is deliberately scoped; it does not claim a nonce-based script policy.
+- Inspect an HTML response for `Strict-Transport-Security`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, and the limited CSP restricting objects and base URLs. The CSP is deliberately scoped; it does not claim a nonce-based script policy.
+- Check `Strict-Transport-Security` on a static path too (for example `/og.jpg`), which proves `public/_headers` shipped, and on `https://www.tintas.app/` as well as the apex — the header carries `includeSubDomains`.
 - Confirm no original builder extension script is requested in standalone mode. Test bookmarks, full/topic drills, retry, mobile navigation, and keyboard focus.
 - Check unknown URLs return 404, the social card renders, and the browser console has no app errors.
 

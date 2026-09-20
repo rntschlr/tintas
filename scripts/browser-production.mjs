@@ -96,7 +96,10 @@ try {
       .first()
       .click();
     await page.waitForURL("**/cases/accusative");
-    await page.getByRole("heading", { level: 1, name: /accusative/i }).waitFor();
+    // The H1 is the case's English job; the Latin name and the endings moved
+    // into the sheet body so the heading reads as a sentence.
+    await page.getByRole("heading", { level: 1, name: /the thing you act on/i }).waitFor();
+    await page.getByText("Accusative · direct object").waitFor();
     assert.deepEqual(errors, [], `browser errors at ${width}px`);
     await context.close();
   }
