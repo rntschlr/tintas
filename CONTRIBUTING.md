@@ -7,8 +7,8 @@ Tinta is a public Hungarian grammar notebook. Keep changes useful to learners, e
 Use Node **22** ([`.nvmrc`](.nvmrc)) and the committed npm lockfile.
 
 ```bash
-git clone https://github.com/rntschlr/berry-brick-flora-bolt.git
-cd berry-brick-flora-bolt
+git clone https://github.com/rntschlr/tintas.git
+cd tintas
 nvm install
 nvm use
 npm ci

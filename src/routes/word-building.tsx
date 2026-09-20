@@ -5,7 +5,12 @@ import { PageHeader, Paper } from "@/components/page";
 
 export const Route = createFileRoute("/word-building")({
   component: WordBuildingPage,
-  head: ({ match }) => pageHead("Word-building", "The suffix machinery behind Hungarian words.", match.pathname),
+  head: ({ match }) =>
+    pageHead("Word-building", "The suffix machinery behind Hungarian words.", match.pathname, {
+      kind: "lesson",
+      crumbs: [{ name: "Desk", path: "/" }],
+      teaches: "Hungarian derivational suffixes",
+    }),
 });
 
 function WordBuildingPage() {

@@ -3,18 +3,12 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { AppShell } from "@/components/app-shell";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { APP_DESCRIPTION, APP_NAME, SITE_ORIGIN, THEME_COLOR } from "@/lib/brand";
+import { APP_DESCRIPTION, APP_NAME, THEME_COLOR } from "@/lib/brand";
 import appCss from "../styles.css?url";
 
-const jsonLd = JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: APP_NAME,
-  alternateName: "tinta, ink",
-  description: APP_DESCRIPTION,
-  url: SITE_ORIGIN,
-  inLanguage: ["en", "hu"],
-});
+// Structured data is per-page and lives in pageHead() (src/lib/seo.ts). The root
+// layout deliberately emits none: a sitewide WebSite node here would make every
+// case sheet claim to be the site itself.
 
 export const Route = createRootRoute({
   head: () => ({
@@ -43,7 +37,6 @@ function Root() {
     <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
       </head>
       <body className="antialiased">
         {import.meta.env.VITE_PUBLIC_STANDALONE === "false" ? <PreviewHostBridge /> : null}

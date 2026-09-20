@@ -11,8 +11,15 @@ export const Route = createFileRoute("/cases")({
           "Noun cases",
           "Eighteen Hungarian noun cases, the movement triads, and here/there/where.",
           match.pathname,
+          {
+            kind: "lesson",
+            crumbs: [{ name: "Desk", path: "/" }],
+            teaches: "The Hungarian noun case system",
+          },
         )
-      : {},
+      : // Returning nothing keeps this layout route from emitting a second
+        // JSON-LD graph on top of the case sheet's own.
+        {},
 });
 
 function CasesPage() {

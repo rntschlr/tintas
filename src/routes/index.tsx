@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   component: Home,
-  head: () => pageHead(),
+  head: () => pageHead(undefined, undefined, "/", { kind: "home" }),
 });
 
 function sheetTarget(last: string | undefined) {

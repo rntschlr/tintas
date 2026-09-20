@@ -5,18 +5,31 @@ import { PageHeader, Paper } from "@/components/page";
 
 export const Route = createFileRoute("/possession")({
   component: PossessionPage,
-  head: ({ match }) => pageHead("Possession", "házam, van kutyám — marking what is yours.", match.pathname),
+  head: ({ match }) =>
+    pageHead("Possession", "házam, van kutyám — marking what is yours.", match.pathname, {
+      kind: "lesson",
+      crumbs: [{ name: "Desk", path: "/" }],
+      teaches: "Hungarian possessive suffixes",
+    }),
 });
 
 function PossessionPage() {
   return (
     <div className="max-w-3xl">
-      <PageHeader id="possession" kicker="Mine, yours" title="Possession" lead={POSSESSION.summary} />
+      <PageHeader
+        id="possession"
+        kicker="Mine, yours"
+        title="Possession"
+        lead={POSSESSION.summary}
+      />
       <Paper className="mb-4">
         <h2 className="font-display text-xl font-semibold">One thing</h2>
         <ul className="mt-3 space-y-2">
           {POSSESSION.single.map((r) => (
-            <li key={r.person} className="flex flex-col border-b border-border py-2 last:border-0 sm:flex-row sm:justify-between">
+            <li
+              key={r.person}
+              className="flex flex-col border-b border-border py-2 last:border-0 sm:flex-row sm:justify-between"
+            >
               <span className="text-sm text-muted">{r.person}</span>
               <span className="font-serif">
                 {r.back} · {r.front}
@@ -31,7 +44,10 @@ function PossessionPage() {
         <p className="mt-1 text-sm text-muted">No extra -k. The possessive already pluralises.</p>
         <ul className="mt-3 space-y-2">
           {POSSESSION.multiple.map((r) => (
-            <li key={r.person} className="flex flex-col border-b border-border py-2 last:border-0 sm:flex-row sm:justify-between">
+            <li
+              key={r.person}
+              className="flex flex-col border-b border-border py-2 last:border-0 sm:flex-row sm:justify-between"
+            >
               <span className="text-sm text-muted">{r.person}</span>
               <span className="font-serif">{r.form}</span>
               <span className="text-sm text-muted">{r.ex}</span>

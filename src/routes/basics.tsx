@@ -17,7 +17,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/basics")({
   component: BasicsPage,
-  head: ({ match }) => pageHead("Basics", "Numbers, colours, calendar, and Hungarian time of day.", match.pathname),
+  head: ({ match }) =>
+    pageHead("Basics", "Numbers, colours, calendar, and Hungarian time of day.", match.pathname, {
+      kind: "lesson",
+      crumbs: [{ name: "Desk", path: "/" }],
+      teaches: "Hungarian numbers, colours, and time",
+    }),
 });
 
 function PairSheet({ items }: { items: { hu: string; en: string; note?: string }[] }) {
@@ -92,8 +97,8 @@ function BasicsPage() {
         <TabsContent value="world">
           <PairSheet items={COUNTRIES} />
           <p className="mt-3 text-sm text-muted">
-            Inhabitant + language: magyar / magyarul, angol / angolul. Cities: Hungarian towns take -ra/-en/-ről.
-            Foreign towns take -ba/-ban/-ból.
+            Inhabitant + language: magyar / magyarul, angol / angolul. Cities: Hungarian towns take
+            -ra/-en/-ről. Foreign towns take -ba/-ban/-ból.
           </p>
         </TabsContent>
       </Tabs>

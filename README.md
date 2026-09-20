@@ -4,7 +4,7 @@
 
 A practical grammar notebook for learning the language around you: the alphabet, vowel harmony, eighteen noun cases, verb conjugations, and everyday phrases. _Tinta_ means **ink**. Open a sheet, try the workbench, then test what you learned.
 
-[![Build and checks](https://github.com/rntschlr/berry-brick-flora-bolt/actions/workflows/cloudflare.yml/badge.svg)](https://github.com/rntschlr/berry-brick-flora-bolt/actions/workflows/cloudflare.yml)
+[![Build and checks](https://github.com/rntschlr/tintas/actions/workflows/cloudflare.yml/badge.svg)](https://github.com/rntschlr/tintas/actions/workflows/cloudflare.yml)
 
 [Explore the screenshots](#screenshots) · [Run locally](#local-development) · [Architecture](docs/architecture.md) · [Deployment](docs/deployment.md) · [Contribute](CONTRIBUTING.md)
 
@@ -47,8 +47,8 @@ These captures document the original interface. The current desk adds a bookmark
 Use **Node 22**, as pinned in [`.nvmrc`](.nvmrc).
 
 ```bash
-git clone https://github.com/rntschlr/berry-brick-flora-bolt.git
-cd berry-brick-flora-bolt
+git clone https://github.com/rntschlr/tintas.git
+cd tintas
 nvm install
 nvm use
 npm ci
@@ -92,8 +92,9 @@ Browser progress belongs to its current origin, so moving from the Pages hostnam
 - [Architecture](docs/architecture.md)
 - [Deployment and custom domains](docs/deployment.md)
 - [Security reporting](SECURITY.md)
+- [About page](src/routes/about.tsx)
 - [Privacy page](src/routes/privacy.tsx)
 
-The product is **Tinta**. `berry-brick-flora-bolt` is the original GitHub repository name. Hungarian name-day data retains real given names.
+The product is **Tinta**; the GitHub repository is `rntschlr/tintas` and the Cloudflare Pages project is `tinta`. Hungarian name-day data retains real given names.
 
-**License:** no open-source license is granted by this repository unless the owner adds one.
+**License:** [CC BY-NC 4.0](LICENSE). The site code and the Hungarian grammar content in `src/data` may be copied, adapted, and taught from with attribution, but not sold or used commercially.

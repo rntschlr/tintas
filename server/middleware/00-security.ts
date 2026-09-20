@@ -1,5 +1,9 @@
 /** Apply to SSR responses too: Cloudflare's static _headers file does not cover Workers. */
 export const RESPONSE_HEADERS = {
+  // Keep this list in the same order as public/_headers so drift shows in a diff.
+  // No `preload`: that is effectively irreversible, and the zone must be clean
+  // on the apex and www first.
+  "strict-transport-security": "max-age=31536000; includeSubDomains",
   "x-content-type-options": "nosniff",
   "referrer-policy": "strict-origin-when-cross-origin",
   "permissions-policy": "camera=(), microphone=(), geolocation=()",

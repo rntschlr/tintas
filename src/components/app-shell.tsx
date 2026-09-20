@@ -182,13 +182,16 @@ export function AppShell({ children }: { children: ReactNode }) {
                 {APP_NAME} · tinta, ink · {APP_TAGLINE}. No account. Progress stays on this device.
               </p>
               <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                <Link to="/about" className="hover:text-fg">
+                  About
+                </Link>
                 <Link to="/privacy" className="hover:text-fg">
                   Privacy
                 </Link>
                 <Link to="/support" className="hover:text-fg">
                   Support
                 </Link>
-                <a href={REPO_URL} className="hover:text-fg">
+                <a href={REPO_URL} rel="noreferrer" className="hover:text-fg">
                   Source
                 </a>
               </p>

@@ -6,7 +6,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/grammar")({
   component: GrammarPage,
-  head: ({ match }) => pageHead("Syntax", "van, plurals, word order, and the extras that keep coming up.", match.pathname),
+  head: ({ match }) =>
+    pageHead(
+      "Syntax",
+      "van, plurals, word order, and the extras that keep coming up.",
+      match.pathname,
+      {
+        kind: "lesson",
+        crumbs: [{ name: "Desk", path: "/" }],
+        teaches: "Hungarian syntax and word order",
+      },
+    ),
 });
 
 function Block({
@@ -62,26 +72,51 @@ function GrammarPage() {
           <TabsTrigger value="post">Postpositions</TabsTrigger>
         </TabsList>
         <TabsContent value="van">
-          <Block title="van / nincs" summary={VAN.summary} points={VAN.points} examples={VAN.examples} />
+          <Block
+            title="van / nincs"
+            summary={VAN.summary}
+            points={VAN.points}
+            examples={VAN.examples}
+          />
         </TabsContent>
         <TabsContent value="plurals">
-          <Block title="Plurals" summary={PLURALS.summary} points={PLURALS.points} examples={PLURALS.examples} />
+          <Block
+            title="Plurals"
+            summary={PLURALS.summary}
+            points={PLURALS.points}
+            examples={PLURALS.examples}
+          />
         </TabsContent>
         <TabsContent value="syntax">
-          <Block title="Topic, focus, verb" summary={SYNTAX.summary} points={SYNTAX.points} examples={SYNTAX.examples} />
+          <Block
+            title="Topic, focus, verb"
+            summary={SYNTAX.summary}
+            points={SYNTAX.points}
+            examples={SYNTAX.examples}
+          />
         </TabsContent>
         <TabsContent value="neg">
-          <Block title="nem, ne, sem" summary={NEGATIVES.summary} points={NEGATIVES.points} examples={NEGATIVES.examples} />
+          <Block
+            title="nem, ne, sem"
+            summary={NEGATIVES.summary}
+            points={NEGATIVES.points}
+            examples={NEGATIVES.examples}
+          />
         </TabsContent>
         <TabsContent value="hogy">
-          <Block title="hogy" summary={HOGY.summary} points={HOGY.points} examples={HOGY.examples} />
+          <Block
+            title="hogy"
+            summary={HOGY.summary}
+            points={HOGY.points}
+            examples={HOGY.examples}
+          />
         </TabsContent>
         <TabsContent value="post">
           <Paper>
             <h2 className="font-display text-2xl font-semibold">Postpositions</h2>
             <p className="mt-2 text-sm text-muted">
-              They follow the noun (ház előtt) and take personal endings when the noun is a person: előttem — in
-              front of me.
+              They follow the noun (ház előtt) and take personal endings when the noun is a person:
+              előttem — in front of me.
             </p>
             <ul className="mt-4">
               {POSTPOSITIONS.map((p) => (

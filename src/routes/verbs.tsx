@@ -5,7 +5,12 @@ import { PageHeader, Paper } from "@/components/page";
 
 export const Route = createFileRoute("/verbs")({
   component: VerbsPage,
-  head: ({ match }) => pageHead("Verbs", "Indefinite vs definite, coverbs, and the conjugator.", match.pathname),
+  head: ({ match }) =>
+    pageHead("Verbs", "Indefinite vs definite, coverbs, and the conjugator.", match.pathname, {
+      kind: "lesson",
+      crumbs: [{ name: "Desk", path: "/" }],
+      teaches: "Hungarian verb conjugation",
+    }),
 });
 
 function EndingTable({

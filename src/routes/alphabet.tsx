@@ -7,7 +7,12 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/alphabet")({
   component: AlphabetPage,
-  head: ({ match }) => pageHead("Alphabet", "Forty letters, the s/sz trap, and long vowels.", match.pathname),
+  head: ({ match }) =>
+    pageHead("Alphabet", "Forty letters, the s/sz trap, and long vowels.", match.pathname, {
+      kind: "lesson",
+      crumbs: [{ name: "Desk", path: "/" }],
+      teaches: "the Hungarian alphabet and its 40 letters",
+    }),
 });
 
 function AlphabetPage() {
@@ -31,11 +36,15 @@ function AlphabetPage() {
                 onClick={() => setActive(l.glyph)}
                 className={cn(
                   "flex min-h-12 flex-col items-center justify-center rounded-lg px-1 py-2",
-                  l.glyph === active ? "bg-primary text-primary-fg" : "bg-surface text-fg shadow-[var(--shadow-border)]",
+                  l.glyph === active
+                    ? "bg-primary text-primary-fg"
+                    : "bg-surface text-fg shadow-[var(--shadow-border)]",
                 )}
               >
                 <span className="font-display text-lg leading-none">{l.glyph}</span>
-                <span className="mt-1 text-xs opacity-70">{l.kind.startsWith("vowel") ? "v" : ""}</span>
+                <span className="mt-1 text-xs opacity-70">
+                  {l.kind.startsWith("vowel") ? "v" : ""}
+                </span>
               </button>
             ))}
           </div>

@@ -30,7 +30,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { id: "pronouns", href: "/pronouns", label: "Pronouns", blurb: "Drop them, case them" },
       { id: "adjectives", href: "/adjectives", label: "Adjectives", blurb: "Comparative, no agreement" },
       { id: "word-building", href: "/word-building", label: "Word-building", blurb: "Suffix machinery" },
-      { id: "grammar", href: "/grammar", label: "Syntax & extras", blurb: "van, plurals, word order" },
+      { id: "grammar", href: "/grammar", label: "Syntax", blurb: "van, plurals, word order" },
     ],
   },
   {

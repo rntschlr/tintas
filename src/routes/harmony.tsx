@@ -5,7 +5,13 @@ import { HarmonyLab } from "@/components/labs";
 
 export const Route = createFileRoute("/harmony")({
   component: HarmonyPage,
-  head: ({ match }) => pageHead("Vowel harmony", "Back, front, and rounded vowels — the rule that runs the language.", match.pathname),
+  head: ({ match }) =>
+    pageHead(
+      "Vowel harmony",
+      "Back, front, and rounded vowels — the rule that runs the language.",
+      match.pathname,
+      { kind: "lesson", crumbs: [{ name: "Desk", path: "/" }], teaches: "Hungarian vowel harmony" },
+    ),
 });
 
 function HarmonyPage() {
@@ -36,16 +42,17 @@ function HarmonyPage() {
                 <Hu>könyv, ül, tűz</Hu>
               </li>
               <li>
-                <span className="font-medium text-fg">Neutral</span> — i í sit out. Alone they act back:{" "}
-                <Hu>írok</Hu>, not írek. In <Hu>segít</Hu> the e decides (front).
+                <span className="font-medium text-fg">Neutral</span> — i í sit out. Alone they act
+                back: <Hu>írok</Hu>, not írek. In <Hu>segít</Hu> the e decides (front).
               </li>
             </ul>
           </Paper>
           <Paper>
             <h2 className="font-display text-xl font-semibold">Two-fold vs three-fold</h2>
             <p className="mt-2 text-sm text-muted">
-              Two-fold endings only care about back vs front: <Hu>-ban/-ben, -nak/-nek, -val/-vel</Hu>. Rounded
-              and unrounded front collapse together.
+              Two-fold endings only care about back vs front:{" "}
+              <Hu>-ban/-ben, -nak/-nek, -val/-vel</Hu>. Rounded and unrounded front collapse
+              together.
             </p>
             <p className="mt-2 text-sm text-muted">
               Three-fold endings split the front camp: <Hu>látok, szeretek, ülök</Hu>. Same split on{" "}
@@ -55,9 +62,9 @@ function HarmonyPage() {
           <Paper>
             <h2 className="font-display text-xl font-semibold">Mixed stems</h2>
             <p className="mt-2 text-sm text-muted">
-              Last classifying vowel usually wins: <Hu>béka</Hu> (frog) takes back endings because of the a.{" "}
-              <Hu>kettő</Hu> is rounded because of ő. Loans sometimes freeze an unexpected suffix — learn those
-              as words, not as rebellions.
+              Last classifying vowel usually wins: <Hu>béka</Hu> (frog) takes back endings because
+              of the a. <Hu>kettő</Hu> is rounded because of ő. Loans sometimes freeze an unexpected
+              suffix — learn those as words, not as rebellions.
             </p>
           </Paper>
         </div>
