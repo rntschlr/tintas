@@ -142,7 +142,8 @@ export const VERBS: VerbEntry[] = [
     presentIndef: ["írok", "írsz", "ír", "írunk", "írtok", "írnak"],
     presentDef: ["írom", "írod", "írja", "írjuk", "írjátok", "írják"],
     pastIndef: ["írtam", "írtál", "írt", "írtunk", "írtatok", "írtak"],
-    note: "i/í alone counts as back: írok, not írek.",
+    note: "ír is a back i-stem: írok, not írek. Compare visz → viszek — i/í-only verbs split.",
+
   },
   {
     id: "dolgozik",

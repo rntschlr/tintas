@@ -26,8 +26,8 @@ export function buildSearchIndex(): SearchHit[] {
   for (const c of CASES) {
     hits.push({
       href: `/cases/${c.id}`,
-      title: `${c.name}  ${c.suffixes.join(" ")}`,
-      subtitle: c.english + " — " + c.summary,
+      title: `${c.headline} · ${c.name}`,
+      subtitle: `${c.huName}  ${c.suffixes.join(" / ")} — ${c.english}`,
     });
   }
   for (const v of VERB_TOPICS) {

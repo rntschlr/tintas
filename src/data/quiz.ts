@@ -112,9 +112,15 @@ export const QUIZ: QuizQuestion[] = [
   {
     id: "q13",
     prompt: "i and í in vowel harmony are…",
-    choices: ["Always front", "Always back", "Neutral, but back if they are the only vowels", "Rounded"],
+    choices: [
+      "Always front",
+      "Always back",
+      "Neutral in mixed words; alone, the stem decides (híd back, víz front)",
+      "Rounded",
+    ],
     answer: 2,
-    explain: "They don’t usually decide the word; alone they take back endings: írok.",
+    explain:
+      "They sit out of mixed stems (virág is back because of á). Alone they split: írok but vizet. There is no “always back” rule.",
     tag: "harmony",
   },
   {

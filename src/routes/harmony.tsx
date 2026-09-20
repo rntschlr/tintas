@@ -73,9 +73,11 @@ function HarmonyPage() {
                 <Hu>könyv, ül, tűz</Hu>
               </li>
               <li>
-                <span className="font-medium text-fg">Neutral</span> — i í sit out. The <Hu>i</Hu>{" "}
-                in <Hu>teniszütő</Hu> rides along with the front camp, but on its own it acts back:{" "}
-                <Hu>írok</Hu>, not írek. In <Hu>segít</Hu> the e decides (front).
+                <span className="font-medium text-fg">Neutral</span> — i í sit out of mixed words.
+                The <Hu>i</Hu> in <Hu>teniszütő</Hu> rides along with the front camp. Alone they
+                split, which is why this page will not say “they act back”: <Hu>ír</Hu> takes back
+                endings (<Hu>írok</Hu>), <Hu>víz</Hu> takes front (<Hu>vizet, vízben</Hu>). In{" "}
+                <Hu>segít</Hu> the e decides (front).
               </li>
             </ul>
           </Paper>
