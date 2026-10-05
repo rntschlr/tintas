@@ -17,12 +17,15 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import pg from "pg";
 import { pendingMigrations } from "./migration-plan.mjs";
+import { applyMigrations } from "./migrate-runner.mjs";
 
 const databaseUrl = process.env.DATABASE_URL?.trim();
+if (!databaseUrl && process.env.NODE_ENV === "production") {
+  console.error("[migrate] DATABASE_URL is required for production migrations.");
+  process.exit(1);
+}
 if (!databaseUrl) {
-  console.log(
-    "[migrate] DATABASE_URL not set — skipping (the PGLite fallback migrates itself).",
-  );
+  console.log("[migrate] DATABASE_URL not set — skipping (the PGLite fallback migrates itself).");
   process.exit(0);
 }
 
@@ -32,7 +35,8 @@ async function main() {
   let entries;
   try {
     entries = await readdir(migrationsDir);
-  } catch {
+  } catch (error) {
+    if (error?.code !== "ENOENT") throw error;
     console.log("[migrate] no migrations/ directory — nothing to do.");
     return;
   }
@@ -42,40 +46,26 @@ async function main() {
     return;
   }
 
-  const pool = new pg.Pool({ connectionString: databaseUrl, max: 1 });
-  const client = await pool.connect();
+  const pool = new pg.Pool({
+    connectionString: databaseUrl,
+    max: 1,
+    connectionTimeoutMillis: 10_000,
+    statement_timeout: 60_000,
+    lock_timeout: 30_000,
+    application_name: "tinta-migrations",
+  });
+  let client;
   try {
-    await client.query(
-      "CREATE TABLE IF NOT EXISTS _migrations (name TEXT PRIMARY KEY, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())",
+    client = await pool.connect();
+    const count = await applyMigrations(client, pendingMigrations(entries, []), (name) =>
+      readFile(join(migrationsDir, name), "utf8"),
     );
-    const applied = (await client.query("SELECT name FROM _migrations")).rows.map(
-      (r) => r.name,
+    console.log(
+      count ? `[migrate] done — ${count} migration(s) applied.` : "[migrate] up to date.",
     );
-
-    let count = 0;
-    for (const { name } of pendingMigrations(entries, applied)) {
-      const text = await readFile(join(migrationsDir, name), "utf8");
-      try {
-        await client.query("BEGIN");
-        // pg's simple-query protocol runs a whole multi-statement file at once.
-        await client.query(text);
-        await client.query("INSERT INTO _migrations (name) VALUES ($1)", [name]);
-        await client.query("COMMIT");
-      } catch (err) {
-        console.error(`[migrate] error applying ${name}`);
-        try {
-          await client.query("ROLLBACK");
-        } catch {
-          // ROLLBACK fails when the connection died — keep the original error.
-        }
-        throw err;
-      }
-      console.log(`[migrate] applied ${name}`);
-      count += 1;
-    }
-    console.log(count ? `[migrate] done — ${count} migration(s) applied.` : "[migrate] up to date.");
   } finally {
-    client.release();
+    // End the pool even when initial connection acquisition fails.
+    client?.release(true);
     await pool.end();
   }
 }

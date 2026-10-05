@@ -21,7 +21,8 @@
     "test": "node --experimental-strip-types --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test 'src/**/*.test.ts'",
     "lint": "eslint . --max-warnings=0",
     "format": "prettier --write .",
-    "test:browser": "node scripts/browser-production.mjs"
+    "test:browser": "node scripts/browser-production.mjs",
+    "security:audit": "npm audit --audit-level=moderate"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
