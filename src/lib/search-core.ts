@@ -42,5 +42,6 @@ export function createSearchMatcher(index: readonly SearchHit[], limit = 20) {
 }
 
 export function searchHits(q: string, index: SearchHit[], limit = 20): SearchHit[] {
+  if (!q.trim()) return [];
   return createSearchMatcher(index, limit)(q);
 }

@@ -107,7 +107,7 @@ export function SearchDialog() {
           </div>
           <ul className="max-h-80 overflow-auto px-2 pb-3">
             {loading ? (
-              <li className="px-3 py-6 text-sm text-muted">Loading search…</li>
+              <li role="status" className="px-3 py-6 text-sm text-muted">Loading search…</li>
             ) : null}
             {searchError ? (
               <li className="px-3 py-6 text-sm text-muted">
@@ -115,7 +115,12 @@ export function SearchDialog() {
                 <button
                   type="button"
                   className="font-medium text-primary underline"
-                  onClick={() => setSearchError(false)}
+                  onClick={() => {
+                    // Browsers cache a failed dynamic import for the document's
+                    // lifetime, so re-running import() would reject instantly.
+                    // Reload to issue a fresh request for the search chunk.
+                    window.location.reload();
+                  }}
                 >
                   Try again
                 </button>
