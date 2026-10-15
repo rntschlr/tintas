@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { searchHits, type SearchHit } from "./search-core.ts";
+import { createSearchMatcher, searchHits, type SearchHit } from "./search-core.ts";
 
 describe("searchHits", () => {
   const index: SearchHit[] = [
@@ -48,5 +48,28 @@ describe("searchHits", () => {
   it("prefers title start over loose includes", () => {
     const hits = searchHits("ver", index);
     assert.equal(hits[0]?.title, "Verbs");
+  });
+
+  it("normalizes hit text once for repeated queries", () => {
+    let titleReads = 0;
+    let subtitleReads = 0;
+    const matcher = createSearchMatcher([
+      {
+        href: "/test",
+        get title() {
+          titleReads += 1;
+          return "Hungarian";
+        },
+        get subtitle() {
+          subtitleReads += 1;
+          return "Language notes";
+        },
+      },
+    ]);
+
+    assert.equal(matcher("hung").length, 1);
+    assert.equal(matcher("language").length, 1);
+    assert.equal(titleReads, 1);
+    assert.equal(subtitleReads, 1);
   });
 });

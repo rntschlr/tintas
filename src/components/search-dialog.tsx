@@ -1,19 +1,43 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { buildSearchIndex, searchHits } from "@/lib/search";
+import type { SearchHit } from "@/lib/search";
 import { cn } from "@/lib/utils";
+
+type SearchMatcher = (query: string) => SearchHit[];
 
 export function SearchDialog() {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const [active, setActive] = useState(0);
+  const [search, setSearch] = useState<SearchMatcher | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [searchError, setSearchError] = useState(false);
   const router = useRouter();
-  const index = useMemo(() => buildSearchIndex(), []);
-  const hits = searchHits(q, index);
+  const hits = search?.(q) ?? [];
+
+  useEffect(() => {
+    if (!open || search || searchError) return;
+    let cancelled = false;
+    setLoading(true);
+    import("@/lib/search")
+      .then(({ buildSearchIndex, createSearchMatcher }) => {
+        if (!cancelled) setSearch(() => createSearchMatcher(buildSearchIndex()));
+      })
+      .catch((error: unknown) => {
+        console.error("Unable to load the search index", error);
+        if (!cancelled) setSearchError(true);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, search, searchError]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -82,7 +106,27 @@ export function SearchDialog() {
             />
           </div>
           <ul className="max-h-80 overflow-auto px-2 pb-3">
-            {q && hits.length === 0 ? (
+            {loading ? (
+              <li role="status" className="px-3 py-6 text-sm text-muted">Loading search…</li>
+            ) : null}
+            {searchError ? (
+              <li className="px-3 py-6 text-sm text-muted">
+                Search could not load.{" "}
+                <button
+                  type="button"
+                  className="font-medium text-primary underline"
+                  onClick={() => {
+                    // Browsers cache a failed dynamic import for the document's
+                    // lifetime, so re-running import() would reject instantly.
+                    // Reload to issue a fresh request for the search chunk.
+                    window.location.reload();
+                  }}
+                >
+                  Try again
+                </button>
+              </li>
+            ) : null}
+            {search && q && hits.length === 0 ? (
               <li className="px-3 py-6 text-sm text-muted">Nothing matches. Try a suffix or an English gloss.</li>
             ) : null}
             {hits.map((h, i) => (

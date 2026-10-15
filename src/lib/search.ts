@@ -13,10 +13,10 @@ import {
   PHRASES,
 } from "@/data/vocab";
 import { NAV } from "@/data/nav";
-import { searchHits, type SearchHit } from "./search-core";
+import { createSearchMatcher, searchHits, type SearchHit } from "./search-core";
 
 export type { SearchHit };
-export { searchHits };
+export { createSearchMatcher, searchHits };
 
 export function buildSearchIndex(): SearchHit[] {
   const hits: SearchHit[] = NAV.map((n) => ({
