@@ -108,3 +108,9 @@ export function sampleSuffixes(cls: Harmony) {
     { name: "1sg indef.", form: back ? "-ok" : rounded ? "-ök" : "-ek" },
   ];
 }
+
+/** Pick the conjugator verb from a `?verb=` deep link; unknown or missing ids fall back to the first verb. */
+export function resolveVerbId(param: unknown, verbs: readonly { id: string }[]): string {
+  const wanted = typeof param === "string" ? param.trim().toLowerCase() : "";
+  return verbs.find((v) => v.id === wanted)?.id ?? verbs[0]?.id ?? "";
+}

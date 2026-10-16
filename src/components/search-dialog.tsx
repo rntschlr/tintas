@@ -57,13 +57,12 @@ export function SearchDialog() {
   const go = (href: string) => {
     setOpen(false);
     setQ("");
-    const [path, hash] = href.split("#");
-    router.history.push(path ?? "/");
-    if (hash) {
-      requestAnimationFrame(() => {
-        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
-      });
-    }
+    // Keep the fragment (and any ?query) in the pushed URL so the destination
+    // knows its target, then wait for that section to actually render before
+    // scrolling — one animation frame is not enough on a fresh route.
+    router.history.push(href || "/");
+    const hash = href.split("#")[1];
+    if (hash) scrollToWhenReady(decodeURIComponent(hash));
   };
 
   return (
@@ -149,4 +148,17 @@ export function SearchDialog() {
       </Dialog>
     </>
   );
+}
+
+function scrollToWhenReady(id: string, timeoutMs = 3000) {
+  const started = performance.now();
+  const tick = () => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (performance.now() - started < timeoutMs) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
 }

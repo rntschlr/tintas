@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { classifyHarmony, sampleSuffixes } from "./hungarian.ts";
+import { classifyHarmony, resolveVerbId, sampleSuffixes } from "./hungarian.ts";
 
 describe("classifyHarmony", () => {
   it("classifies back vowels (ház)", () => {
@@ -91,5 +91,26 @@ describe("sampleSuffixes", () => {
 
   it("does not invent endings for an unknown i-stem", () => {
     assert.deepEqual(sampleSuffixes("neutral"), []);
+  });
+});
+
+describe("empty harmony input", () => {
+  it("reports no vowel instead of pretending to be back", () => {
+    const r = classifyHarmony("");
+    assert.match(r.label, /No vowel/);
+    assert.deepEqual(r.vowels, []);
+    assert.deepEqual(sampleSuffixes(r.class), []);
+  });
+});
+
+describe("resolveVerbId", () => {
+  const verbs = [{ id: "lat" }, { id: "szeret" }];
+  it("picks the verb named in the deep link", () => {
+    assert.equal(resolveVerbId("szeret", verbs), "szeret");
+    assert.equal(resolveVerbId(" SZERET ", verbs), "szeret");
+  });
+  it("falls back to the first verb for unknown or missing ids", () => {
+    assert.equal(resolveVerbId("nope", verbs), "lat");
+    assert.equal(resolveVerbId(undefined, verbs), "lat");
   });
 });
