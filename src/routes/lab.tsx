@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouterState } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { CaseLab, Conjugator, HarmonyLab } from "@/components/labs";
 import { PageHeader } from "@/components/page";
@@ -12,6 +12,9 @@ export const Route = createFileRoute("/lab")({
 });
 
 function LabPage() {
+  const verb = useRouterState({
+    select: (state) => new URLSearchParams(state.location.searchStr).get("verb") ?? undefined,
+  });
   return (
     <div>
       <PageHeader
@@ -23,7 +26,9 @@ function LabPage() {
       <div className="flex flex-col gap-8">
         <HarmonyLab />
         <CaseLab />
-        <Conjugator />
+        <div id="conjugator" className="scroll-mt-28">
+          <Conjugator initialVerb={verb} />
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
-import { CASES, LAB_NOUNS } from "@/data/cases";
+import { useEffect, useMemo, useState } from "react";
+import { CASES, LAB_NOUNS, labCaseForm } from "@/data/cases";
 import { PERSONS, VERBS } from "@/data/verbs";
-import { classifyHarmony, sampleSuffixes } from "@/lib/hungarian";
+import { classifyHarmony, resolveVerbId, sampleSuffixes } from "@/lib/hungarian";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Paper, Hu } from "@/components/page";
@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 export function HarmonyLab({ compact = false }: { compact?: boolean }) {
   const [word, setWord] = useState("ház");
 
-  const result = classifyHarmony(word || "a");
+  const result = classifyHarmony(word);
   const suffixes = sampleSuffixes(result.class);
 
   return (
@@ -64,7 +64,7 @@ export function CaseLab() {
   const [caseId, setCaseId] = useState("inessive");
   const noun = LAB_NOUNS.find((n) => n.stem === stem) ?? LAB_NOUNS[0];
   const cas = CASES.find((c) => c.id === caseId) ?? CASES[0];
-  const form = noun.forms[caseId] ?? noun.stem;
+  const shown = labCaseForm(noun, caseId);
   const triadCases = useMemo(
     () => CASES.filter((c) => c.triad),
     [],
@@ -92,10 +92,11 @@ export function CaseLab() {
         </div>
         <div className="mt-6 rounded-xl bg-bg px-4 py-6 text-center">
           <p className="text-xs tracking-wide text-muted uppercase">{cas.name}</p>
-          <p className="mt-2 font-display text-4xl font-semibold">{form}</p>
+          <p className="mt-2 font-display text-4xl font-semibold">{shown.form}</p>
           <p className="mt-2 text-sm text-muted">
             {cas.suffixes.join(" / ")} · {cas.english}
           </p>
+          {shown.caution ? <p className="mt-3 text-sm text-muted">{shown.caution}</p> : null}
         </div>
       </Paper>
       <Paper>
@@ -144,8 +145,11 @@ export function CaseLab() {
   );
 }
 
-export function Conjugator() {
-  const [id, setId] = useState(VERBS[0].id);
+export function Conjugator({ initialVerb }: { initialVerb?: string }) {
+  const [id, setId] = useState(() => resolveVerbId(initialVerb, VERBS));
+  useEffect(() => {
+    if (initialVerb) setId(resolveVerbId(initialVerb, VERBS));
+  }, [initialVerb]);
   const verb = VERBS.find((v) => v.id === id) ?? VERBS[0];
   const hasDef = verb.presentDef[0] !== "—";
 

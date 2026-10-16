@@ -57,26 +57,22 @@ export function SearchDialog() {
   const go = (href: string) => {
     setOpen(false);
     setQ("");
-    const [path, hash] = href.split("#");
-    router.history.push(path ?? "/");
-    if (hash) {
-      requestAnimationFrame(() => {
-        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
-      });
-    }
+    router.history.push(href || "/");
+    const hash = href.split("#")[1];
+    if (hash) scrollToWhenReady(decodeURIComponent(hash));
   };
 
   return (
     <>
       <Button
         variant="secondary"
-        className="h-11 w-auto justify-start gap-2 px-3 text-muted md:w-64"
+        aria-label="Search notes"
+        className="h-11 w-11 justify-center px-0 text-muted sm:w-auto sm:justify-start sm:gap-2 sm:px-3 md:w-64"
         onClick={() => setOpen(true)}
       >
         <Search className="size-4" />
         <span className="hidden sm:inline">Search notes</span>
-        <span className="sm:hidden">Search</span>
-        <kbd className="ml-auto hidden rounded-sm border border-border px-1.5 text-xs text-subtle md:inline">
+        <kbd className="ml-auto hidden rounded-sm border border-border px-1.5 text-xs text-muted md:inline">
           ⌘K
         </kbd>
       </Button>
@@ -149,4 +145,17 @@ export function SearchDialog() {
       </Dialog>
     </>
   );
+}
+
+function scrollToWhenReady(id: string, timeoutMs = 3000) {
+  const started = performance.now();
+  const tick = () => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (performance.now() - started < timeoutMs) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
 }

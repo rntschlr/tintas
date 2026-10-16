@@ -82,7 +82,7 @@ The [architecture guide](docs/architecture.md) explains the boundaries, source l
 
 The repository includes a Cloudflare Pages workflow. Pull requests run typechecking, lint, tests, a production build, and checks against the built server handler. Uploads are restricted to `main` and require deployment credentials.
 
-The canonical website address is [**tintas.app**](https://tintas.app). Cloudflare Pages project **`tinta`** serves the application, with `https://tinta-4pr.pages.dev` as its assigned Pages hostname. Follow the [deployment guide](docs/deployment.md) to configure the custom domain, verify publication, and manage releases. Keep the GitHub Actions repository variable **`VITE_PUBLIC_SITE_URL`** set to `https://tintas.app` and rebuild when the domain changes.
+The canonical website address is [**tintas.app**](https://tintas.app). Cloudflare Pages project **`tinta`** serves the application. The `pages.dev` hostname is the one shown on that project in the Cloudflare dashboard; an older name, `tinta-4pr.pages.dev`, no longer resolves. Follow the [deployment guide](docs/deployment.md) to configure the custom domain, verify publication, and manage releases. Keep the GitHub Actions repository variable **`VITE_PUBLIC_SITE_URL`** set to `https://tintas.app` and rebuild when the domain changes.
 
 Browser progress belongs to its current origin, so moving from the Pages hostname to the custom domain starts a separate local notebook.
 

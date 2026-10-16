@@ -51,7 +51,7 @@ export function buildSearchIndex(): SearchHit[] {
   }
   for (const v of VERBS) {
     hits.push({
-      href: "/lab",
+      href: `/lab?verb=${encodeURIComponent(v.id)}#conjugator`,
       title: `${v.stem} — ${v.en}`,
       subtitle: v.presentIndef.slice(0, 3).join(", "),
     });

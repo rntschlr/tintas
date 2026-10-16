@@ -73,3 +73,25 @@ describe("searchHits", () => {
     assert.equal(subtitleReads, 1);
   });
 });
+
+describe("accent-insensitive fallback", () => {
+  const index: SearchHit[] = [
+    { href: "/basics", title: "ház", subtitle: "house" },
+    { href: "/basics", title: "haz-ish", subtitle: "plain ascii" },
+    { href: "/phrases", title: "Köszönöm", subtitle: "Thank you" },
+  ];
+
+  it("finds accented titles from unaccented queries", () => {
+    assert.ok(searchHits("koszonom", index).some((hit) => hit.title === "Köszönöm"));
+  });
+
+  it("ranks accent-faithful matches above folded ones", () => {
+    assert.equal(searchHits("ház", index)[0]?.title, "ház");
+    assert.equal(searchHits("haz", index)[0]?.title, "haz-ish");
+    assert.ok(searchHits("haz", index).some((hit) => hit.title === "ház"));
+  });
+
+  it("treats decomposed input like composed input", () => {
+    assert.equal(searchHits("ha\u0301z", index)[0]?.title, "ház");
+  });
+});

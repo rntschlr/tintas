@@ -299,7 +299,7 @@ export const CASES: NounCase[] = [
     summary: "Being inside. Time-of-year and many abstract ‘in’s live here too.",
     rule: "-ban/-ben is being inside something: a room, a building, a foreign country, a month, a year. It answers hol? — where at? Most abstract English ‘in’s land here as well.",
     notWhen:
-      "Not for Hungarian settlements, which take the surface ending: Budapesten, Szegeden, Pécsen. Not for clock times either — those take -kor.",
+      "Not for Hungarian settlements, which take the surface ending: Budapesten, Szegeden, Pécsett. Not for clock times either — those take -kor.",
     contrast: {
       a: { hu: "a házban", en: "in the house" },
       b: { hu: "Budapesten", en: "in Budapest" },
@@ -729,7 +729,7 @@ export const LAB_NOUNS: LabNoun[] = [
   {
     stem: "Budapest",
     en: "Budapest",
-    harmony: "back",
+    harmony: "front",
     forms: {
       nominative: "Budapest",
       accusative: "Budapestet",
@@ -799,3 +799,27 @@ export const LAB_NOUNS: LabNoun[] = [
     },
   },
 ];
+
+const INTERIOR_CASES = new Set(["illative", "inessive", "elative"]);
+
+/** Form the case lab should show. Missing endings stay blank instead of echoing the stem. */
+export function labCaseForm(noun: LabNoun, caseId: string): { form: string; caution?: string } {
+  const raw = noun.forms[caseId];
+  if (!raw) {
+    return {
+      form: "—",
+      caution:
+        caseId === "temporal"
+          ? "Ordinary nouns do not take -kor. It marks a time: háromkor, éjfélkor."
+          : undefined,
+    };
+  }
+  if (noun.stem === "Budapest" && INTERIOR_CASES.has(caseId)) {
+    return {
+      form: raw,
+      caution:
+        "Not how you locate the city. Towns in Hungary use the surface triad: Budapestre, Budapesten, Budapestről.",
+    };
+  }
+  return { form: raw };
+}

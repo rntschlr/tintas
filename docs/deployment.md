@@ -1,6 +1,6 @@
 # Deploy Tinta at tintas.app
 
-Tinta runs as a public, server-rendered Cloudflare Pages site. Its canonical origin is `https://tintas.app`. The existing Pages project is named **`tinta`**, and its assigned Pages hostname is `https://tinta-4pr.pages.dev`. The project name does not change when a custom domain is attached. No database, no sign-in: bookmarks and progress stay in each visitor’s browser.
+Tinta runs as a public, server-rendered Cloudflare Pages site. Its canonical origin is `https://tintas.app`. The existing Pages project is named **`tinta`**. Its `pages.dev` hostname is assigned by Cloudflare and shown on the project; the previously documented `tinta-4pr.pages.dev` no longer resolves, so read the live hostname from the dashboard instead of trusting this file. The project name does not change when a custom domain is attached. No database, no sign-in: bookmarks and progress stay in each visitor’s browser.
 
 ## Release configuration
 
@@ -24,7 +24,7 @@ The workflow builds standalone mode with auth disabled. Private platform preview
 2. Follow Cloudflare's DNS instructions. An apex domain such as `example.com` must be a Cloudflare zone in the same account with Cloudflare nameservers; a subdomain can use a CNAME at another DNS provider. Associate the domain in Pages before adding a CNAME.
 3. Wait for domain verification and HTTPS activation.
 4. Set the GitHub Actions repository variable `VITE_PUBLIC_SITE_URL` to `https://tintas.app` and rerun the workflow on `main`. This sets page canonical URLs, share-image URLs, structured data, `robots.txt`, and every sitemap entry together. Changing a Cloudflare runtime variable alone does not rebuild metadata created by GitHub Actions.
-5. Once the canonical hostname works over HTTPS, configure permanent Cloudflare redirects from `www.tintas.app` and the production `tinta-4pr.pages.dev` hostname to `https://tintas.app`, preserving paths and query strings. Verify the redirects do not loop.
+5. Once the canonical hostname works over HTTPS, configure permanent Cloudflare redirects from `www.tintas.app` and the project's `pages.dev` hostname to `https://tintas.app`, preserving paths and query strings. Verify the redirects do not loop.
 
 Progress stored on the old hostname will not automatically move to the new one: browser localStorage is isolated by origin. No server-side progress copy exists.
 

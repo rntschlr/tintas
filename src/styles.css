@@ -11,8 +11,8 @@
   --color-bg-elevated: #ebe4d6;
   --color-surface: #fffdf8;
   --color-fg: #1a1612;
-  --color-muted: #6e665c;
-  --color-subtle: #8a8175;
+  --color-muted: #6b645a;
+  --color-subtle: #736a5f;
   --color-primary: #b33a26;
   --color-primary-fg: #fffdf8;
   --color-border: #d8d0c2;
@@ -44,6 +44,7 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
   }
 
   body {
