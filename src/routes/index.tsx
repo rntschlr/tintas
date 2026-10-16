@@ -68,14 +68,14 @@ function Home() {
         </div>
       </header>
 
-      <div className="mb-10 grid max-w-xl grid-cols-3 gap-3">
+      <div className="mb-10 grid w-full max-w-xl grid-cols-3 gap-2 sm:gap-3">
         {[
           { form: "házba", en: "into the house" },
           { form: "házban", en: "in the house" },
           { form: "házból", en: "out of the house" },
         ].map((row) => (
-          <Link key={row.form} to="/cases" className="sheet-card px-3 py-4 text-center">
-            <span lang="hu" className="block font-serif text-xl text-fg md:text-2xl">
+          <Link key={row.form} to="/cases" className="sheet-card min-w-0 px-2 py-4 text-center sm:px-3">
+            <span lang="hu" className="block font-serif text-lg text-fg sm:text-2xl">
               {row.form}
             </span>
             <span className="mt-1 block text-xs text-muted">{row.en}</span>

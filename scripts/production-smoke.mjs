@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { loadEnv } from "vite";
 import { siteOrigin } from "./site-config.mjs";
 
@@ -74,6 +75,9 @@ const health = await worker.fetch(new Request(`${origin}/health`), {}, context);
 assert.equal(health.status, 200);
 assert.equal(health.headers.get("cache-control"), "no-store");
 assert.deepEqual(await health.json(), { status: "ok", service: "tinta" });
+const healthHead = await worker.fetch(new Request(`${origin}/health`, { method: "HEAD" }), {}, context);
+assert.equal(healthHead.status, 200, "HEAD /health is liveness, not a 404");
+await healthHead.body?.cancel();
 for (const path of [
   "/api/auth/get-session",
   "/auth/popup",
@@ -98,6 +102,26 @@ assert.match(
   readFileSync("dist/_headers", "utf8"),
   /Strict-Transport-Security: max-age=31536000; includeSubDomains/,
   "HSTS reaches static assets via _headers",
+);
+function findNamedDir(dir, name) {
+  if (!existsSync(dir)) return null;
+  for (const entry of readdirSync(dir)) {
+    const path = join(dir, entry);
+    if (!statSync(path).isDirectory()) continue;
+    if (entry === name) return path;
+    const nested = findNamedDir(path, name);
+    if (nested) return nested;
+  }
+  return null;
+}
+assert.equal(findNamedDir("dist", "__grok"), null, "public build does not ship Grok install chrome");
+const securityTxt = readFileSync("dist/.well-known/security.txt", "utf8");
+assert.match(securityTxt, /Contact: mailto:johnkrentschler@icloud.com/);
+assert.match(securityTxt, /Canonical: https:\/\/tintas\.app\/\.well-known\/security\.txt/);
+assert.match(
+  readFileSync("dist/_routes.json", "utf8"),
+  /\/\.well-known\/security\.txt/,
+  "security.txt is excluded from the worker so Pages can serve the file",
 );
 // Assert that dormant auth/database/connector and preview bridge code stays out
 // of both published JavaScript targets. This catches accidental root imports.

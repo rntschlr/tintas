@@ -29,10 +29,7 @@ function InkMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" className={className} aria-hidden>
       <rect width="32" height="32" rx="8" fill="var(--color-ink)" />
-      <path
-        fill="var(--color-bg)"
-        d="M8.8 23.6V8.4h4.4L16 16.2l2.8-7.8h4.4v15.2h-3.3V14.4L17.1 22h-2.2l-2.8-7.6v9.2z"
-      />
+      <path fill="var(--color-bg)" d="M8.2 8.6h15.6v3.3h-6v11.2h-3.6V11.9H8.2z" />
       <rect x="9" y="25.2" width="14" height="1.7" rx="0.85" fill="var(--color-primary)" />
     </svg>
   );
@@ -130,7 +127,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <a href="#main" className="skip-link">
         Skip to notes
       </a>
-      <div className="mx-auto flex min-h-dvh max-w-7xl">
+      <div className="mx-auto flex min-h-dvh w-full min-w-0 max-w-7xl">
         <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-border px-4 py-6 md:flex">
           <Brand />
           {nev.names.length > 0 ? (
@@ -150,7 +147,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-40 flex items-center gap-2 border-b border-border bg-bg/90 px-4 py-3 backdrop-blur-sm md:px-8">
+          <header className="sticky top-0 z-40 flex w-full min-w-0 items-center gap-2 border-b border-border bg-bg/90 px-4 py-3 backdrop-blur-sm md:px-8">
             <div className="md:hidden">
               <Brand compact />
             </div>
@@ -201,10 +198,10 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
 
       <nav
-        className="tinta-tabbar fixed inset-x-0 bottom-0 z-40 border-t border-border bg-bg/95 backdrop-blur-sm md:hidden"
+        className="tinta-tabbar fixed inset-x-0 bottom-0 z-40 w-full border-t border-border bg-bg/95 backdrop-blur-sm md:hidden"
         aria-label="Primary"
       >
-        <div className="mx-auto grid max-w-7xl grid-cols-5">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-5">
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const active = pathActive(pathname, tab.href);
@@ -214,7 +211,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 to={tab.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex min-h-16 flex-col items-center justify-center gap-1 text-xs transition-colors duration-[var(--motion-quick)] ease-[var(--ease-out)]",
+                  "flex min-h-16 min-w-0 flex-col items-center justify-center gap-1 px-1 text-[11px] transition-colors duration-[var(--motion-quick)] ease-[var(--ease-out)]",
                   active ? "font-medium text-primary" : "text-muted",
                 )}
               >
@@ -226,7 +223,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <button
             type="button"
             className={cn(
-              "flex min-h-16 flex-col items-center justify-center gap-1 text-xs transition-colors duration-[var(--motion-quick)] ease-[var(--ease-out)]",
+              "flex min-h-16 min-w-0 flex-col items-center justify-center gap-1 px-1 text-[11px] transition-colors duration-[var(--motion-quick)] ease-[var(--ease-out)]",
               open || !tabMatch ? "font-medium text-primary" : "text-muted",
             )}
             onClick={() => setOpen(true)}

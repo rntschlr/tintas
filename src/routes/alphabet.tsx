@@ -97,6 +97,7 @@ function AlphabetPage() {
               </button>
             ))}
           </div>
+          <p className="mt-2 text-xs text-muted">v marks a vowel. A dashed key is a loan letter.</p>
           <Paper className="mt-6">
             <div className="flex flex-wrap items-end gap-4">
               <p className="font-display text-6xl leading-none">{letter.glyph}</p>
