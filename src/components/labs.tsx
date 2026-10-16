@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CASES, LAB_NOUNS } from "@/data/cases";
 import { PERSONS, VERBS } from "@/data/verbs";
-import { classifyHarmony, sampleSuffixes } from "@/lib/hungarian";
+import { classifyHarmony, resolveVerbId, sampleSuffixes } from "@/lib/hungarian";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Paper, Hu } from "@/components/page";
@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 export function HarmonyLab({ compact = false }: { compact?: boolean }) {
   const [word, setWord] = useState("ház");
 
-  const result = classifyHarmony(word || "a");
+  const result = classifyHarmony(word);
   const suffixes = sampleSuffixes(result.class);
 
   return (
@@ -144,8 +144,13 @@ export function CaseLab() {
   );
 }
 
-export function Conjugator() {
-  const [id, setId] = useState(VERBS[0].id);
+export function Conjugator({ initialVerb }: { initialVerb?: string } = {}) {
+  const [id, setId] = useState(() => resolveVerbId(initialVerb, VERBS));
+  // Search deep links (/lab?verb=szeret) can arrive while /lab is already
+  // mounted, so follow the param when it changes rather than only on mount.
+  useEffect(() => {
+    if (initialVerb) setId(resolveVerbId(initialVerb, VERBS));
+  }, [initialVerb]);
   const verb = VERBS.find((v) => v.id === id) ?? VERBS[0];
   const hasDef = verb.presentDef[0] !== "—";
 
