@@ -115,6 +115,14 @@ function findNamedDir(dir, name) {
   return null;
 }
 assert.equal(findNamedDir("dist", "__grok"), null, "public build does not ship Grok install chrome");
+const securityTxt = readFileSync("dist/.well-known/security.txt", "utf8");
+assert.match(securityTxt, /Contact: mailto:johnkrentschler@icloud.com/);
+assert.match(securityTxt, /Canonical: https:\/\/tintas\.app\/\.well-known\/security\.txt/);
+assert.match(
+  readFileSync("dist/_routes.json", "utf8"),
+  /\/\.well-known\/security\.txt/,
+  "security.txt is excluded from the worker so Pages can serve the file",
+);
 // Assert that dormant auth/database/connector and preview bridge code stays out
 // of both published JavaScript targets. This catches accidental root imports.
 const forbidden = [

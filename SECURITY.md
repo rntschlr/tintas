@@ -14,6 +14,8 @@ Email **johnkrentschler@icloud.com** with:
 
 You can expect an acknowledgement within a few days. Please do **not** open a public GitHub issue for sensitive reports.
 
+The same contact is published at `https://tintas.app/.well-known/security.txt`.
+
 ## Scope notes
 
 - Progress data is stored **on-device** (localStorage). Tinta does not require an account for the public grammar notebook.

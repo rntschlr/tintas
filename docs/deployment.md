@@ -12,7 +12,7 @@ In GitHub → repository **Settings → Secrets and variables → Actions**, con
 - Secret `CLOUDFLARE_ACCOUNT_ID`, identifying the account that owns the Pages project.
 - Repository variable `VITE_PUBLIC_SITE_URL` = `https://tintas.app`.
 
-The workflow checks types, lint, tests, the production build, server responses, and browser interactions before uploading. Missing deployment secrets produce an explicit skip rather than a live site. Keep the `tinta` project name in `wrangler.toml` and the workflow's deploy command aligned.
+The workflow checks dependencies, types, lint, tests, the production build, server responses, and browser interactions before uploading. Missing deployment secrets fail that release job so a green `main` run means the Pages project was updated. Keep the `tinta` project name in `wrangler.toml` and the workflow's deploy command aligned.
 
 Verify each deployment in Cloudflare and open the actual URL it returns. A successful local build alone is not proof of publication.
 
