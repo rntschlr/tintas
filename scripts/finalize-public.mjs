@@ -34,4 +34,17 @@ writeFileSync(
 );
 writeFileSync("dist/robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
 omitShippedGrok("dist");
+// Nitro records every public file as a static exclude before this script deletes
+// __grok. Leaving those excludes in place makes Pages keep serving the old CSS
+// from an earlier upload instead of the worker's 404.
+const routesPath = "dist/_routes.json";
+const routes = JSON.parse(readFileSync(routesPath, "utf8"));
+if (Array.isArray(routes.exclude)) {
+  const exclude = routes.exclude.filter((entry) => !String(entry).includes("__grok"));
+  if (exclude.length !== routes.exclude.length) {
+    routes.exclude = exclude;
+    writeFileSync(routesPath, `${JSON.stringify(routes, null, 2)}\n`);
+    console.log("[public metadata] /__grok is no longer a static asset route");
+  }
+}
 console.log(`[public metadata] Sitemap and robots.txt use ${origin}`);

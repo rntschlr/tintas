@@ -83,6 +83,7 @@ for (const path of [
   "/auth/popup",
   "/__app-env",
   "/__grok/manifest.webmanifest",
+  "/__grok/install/styles.css",
 ]) {
   const response = await worker.fetch(new Request(`${origin}${path}`), {}, context);
   assert.equal(response.status, 404, `private scaffold endpoint absent: ${path}`);
@@ -115,6 +116,11 @@ function findNamedDir(dir, name) {
   return null;
 }
 assert.equal(findNamedDir("dist", "__grok"), null, "public build does not ship Grok install chrome");
+assert.doesNotMatch(
+  readFileSync("dist/_routes.json", "utf8"),
+  /__grok/,
+  "deleted Grok files are not pinned as static assets",
+);
 const securityTxt = readFileSync("dist/.well-known/security.txt", "utf8");
 assert.match(securityTxt, /Contact: mailto:johnkrentschler@icloud.com/);
 assert.match(securityTxt, /Canonical: https:\/\/tintas\.app\/\.well-known\/security\.txt/);
