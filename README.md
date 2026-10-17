@@ -61,6 +61,7 @@ Open **http://localhost:8080**. Keep the public configuration from [`.env.exampl
 Run the same checks used by pull requests:
 
 ```bash
+npm run security:audit
 npm run typecheck
 npm run lint
 npm test

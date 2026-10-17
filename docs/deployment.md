@@ -81,3 +81,28 @@ VITE_PUBLIC_SITE_URL=https://example.com npm run test:production
 Use GitHub Actions logs for build failures and Cloudflare deployment logs for runtime failures. Do not log credentials, cookies, or learner data. Cloudflare's deployment history can roll production back to a known-good deployment; follow up with a Git revert so the next build matches the restored version. Keep credentials in Actions/Cloudflare secret settings, never in `VITE_` variables or source control.
 
 A previous source revision included a platform preview OAuth credential. It has been removed from active source; history still contains it. The issuer/broker owner must rotate or revoke it if it remains valid. Public standalone deployment does not need that credential.
+
+## Dependency and database release gates
+
+CI audits the complete dependency tree, including build tools, before building.
+Dependabot proposes production and development patch/minor updates separately;
+review and test each group before merging. A deployment invocation with missing
+Cloudflare credentials now fails explicitly, so a green release means the upload
+step was not silently skipped. Pull-request checks do not need those secrets.
+
+The public notebook still has no learner database or account sync. The optional
+PostgreSQL migration tooling serializes deployers with a session advisory lock,
+reads migration bookkeeping only after taking the lock, and applies each file in
+a transaction. Database connection, statement, and lock waits are bounded. Do not
+use transaction-pooling endpoints for the migration job: it needs a stable session
+for its advisory lock. Use a direct PostgreSQL or session-pooling endpoint.
+
+For an account-enabled deployment, set `NODE_ENV=production` when running
+`npm run db:migrate`; missing `DATABASE_URL` is then an error. Take a verified
+backup before migrations. Keep migration files immutable after release and use
+backward-compatible schema changes so the previous application can be restored.
+Unit tests model concurrent deploys and rollback; run migrations and restore
+exercises against the actual PostgreSQL service before enabling a data backend.
+The public Cloudflare build does not invoke this optional migration tooling.
+
+See [PostgreSQL advisory locks](https://www.postgresql.org/docs/current/explicit-locking.html#ADVISORY-LOCKS) for session-lock semantics.
