@@ -26,7 +26,8 @@ jobs:
       - name: Resolve patched packages and lockfile
         run: |
           npm install --package-lock-only --ignore-scripts --no-fund --save-exact better-auth@1.7.26 zod@4.6.7
-          npm install --package-lock-only --ignore-scripts --no-fund --save-dev --save-exact vite@8.3.5 typescript-eslint@8.72.3
+          npm pkg set 'overrides.@typescript-eslint/typescript-estree.minimatch=11.0.1'
+          npm install --package-lock-only --ignore-scripts --no-fund --save-dev --save-exact vite@8.3.5 typescript-eslint@8.72.2
           npm audit fix --package-lock-only --ignore-scripts --no-fund --audit-level=moderate
           npm audit --audit-level=moderate
       - name: Confirm clean installation
