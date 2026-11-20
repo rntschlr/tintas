@@ -34,9 +34,9 @@ export function createSearchMatcher(index: readonly SearchHit[], limit = 20) {
         if (title.includes(n)) score += 4;
         if (subtitle.includes(n)) score += 2;
         if (score === 0) {
-          if (foldedTitle.startsWith(folded)) score += 2;
-          if (foldedTitle.includes(folded)) score += 1;
-          if (foldedSubtitle.includes(folded)) score += 0.5;
+          if (foldedTitle.startsWith(folded)) score += 1;
+          if (foldedTitle.includes(folded)) score += 0.5;
+          if (foldedSubtitle.includes(folded)) score += 0.25;
         }
         return { hit, key, score };
       })

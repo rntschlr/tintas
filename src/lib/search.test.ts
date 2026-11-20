@@ -91,6 +91,15 @@ describe("accent-insensitive fallback", () => {
     assert.ok(searchHits("haz", index).some((hit) => hit.title === "ház"));
   });
 
+  it("puts an accent-faithful subtitle above an accent-folded title", () => {
+    const index: SearchHit[] = [
+      { href: "/folded", title: "ház", subtitle: "house" },
+      { href: "/faithful", title: "entry", subtitle: "haz" },
+    ];
+    assert.equal(searchHits("haz", index)[0]?.href, "/faithful");
+    assert.equal(searchHits("haz", index)[1]?.href, "/folded");
+  });
+
   it("treats decomposed input like composed input", () => {
     assert.equal(searchHits("ha\u0301z", index)[0]?.title, "ház");
   });

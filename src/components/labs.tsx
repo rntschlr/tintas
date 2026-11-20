@@ -43,7 +43,7 @@ export function HarmonyLab({ compact = false }: { compact?: boolean }) {
           ))}
         </ul>
       ) : null}
-      {!compact && result.caveat ? (
+      {!compact && result.caveat && result.class === "neutral" && result.vowels.length > 0 ? (
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <div className="rounded-lg bg-bg-elevated px-3 py-2 text-sm">
             <p className="text-xs tracking-wide text-muted uppercase">If back · híd</p>
@@ -148,7 +148,7 @@ export function CaseLab() {
 export function Conjugator({ initialVerb }: { initialVerb?: string }) {
   const [id, setId] = useState(() => resolveVerbId(initialVerb, VERBS));
   useEffect(() => {
-    if (initialVerb) setId(resolveVerbId(initialVerb, VERBS));
+    setId(resolveVerbId(initialVerb, VERBS));
   }, [initialVerb]);
   const verb = VERBS.find((v) => v.id === id) ?? VERBS[0];
   const hasDef = verb.presentDef[0] !== "—";
