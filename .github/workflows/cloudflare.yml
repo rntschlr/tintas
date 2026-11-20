@@ -37,9 +37,6 @@ jobs:
       - name: Build for Cloudflare
         env:
           NITRO_PRESET: cloudflare-pages
-          VITE_AUTH_ENABLED: "false"
-          VITE_PUBLIC_STANDALONE: "true"
-          VITE_SHIP_GROK_CHROME: "false"
           VITE_PUBLIC_SITE_URL: ${{ vars.VITE_PUBLIC_SITE_URL || 'https://tintas.app' }}
         run: npm run build:cf
       - name: Verify production server
