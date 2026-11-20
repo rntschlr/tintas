@@ -1,26 +1,16 @@
 import { spawnSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
-import { exitStatusFromChild } from "./with-app-env.mjs";
 
-// The public target is a contract, independent of shell and preview overrides.
-// Preserve VITE_PUBLIC_SITE_URL so every artifact uses the operator's domain.
-const env = {
-  ...process.env,
-  NITRO_PRESET: "cloudflare-pages",
-  VITE_AUTH_ENABLED: "false",
-  VITE_PUBLIC_STANDALONE: "true",
-  VITE_SHIP_GROK_CHROME: "false",
-};
-const root = fileURLToPath(new URL("../", import.meta.url));
+// Build the public Cloudflare Pages app and rewrite its sitemap metadata.
+// Learner data stays in localStorage; there is no database or account service.
+const env = { ...process.env, NITRO_PRESET: "cloudflare-pages" };
 for (const args of [
-  ["scripts/with-app-env.mjs", "vite", "build"],
-  ["scripts/with-app-env.mjs", process.execPath, "scripts/finalize-public.mjs"],
+  ["node_modules/vite/bin/vite.js", "build"],
+  ["scripts/finalize-public.mjs"],
 ]) {
-  const result = spawnSync(process.execPath, args, { cwd: root, env, stdio: "inherit" });
+  const result = spawnSync(process.execPath, args, { env, stdio: "inherit" });
   if (result.error) {
-    console.error("[public build] Could not start build command:", result.error.message);
+    console.error("[public build] Could not start command:", result.error.message);
     process.exit(1);
   }
-  const status = exitStatusFromChild(result.status, result.signal);
-  if (status !== 0) process.exit(status);
+  if (result.status !== 0) process.exit(result.status ?? 1);
 }

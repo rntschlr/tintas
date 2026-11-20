@@ -1,15 +1,10 @@
 import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
-import { AuthProvider } from "@/lib/auth/provider";
-import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { AppShell } from "@/components/app-shell";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { APP_DESCRIPTION, APP_NAME, THEME_COLOR } from "@/lib/brand";
 import appCss from "../styles.css?url";
 
-// Structured data is per-page and lives in pageHead() (src/lib/seo.ts). The root
-// layout deliberately emits none: a sitewide WebSite node here would make every
-// case sheet claim to be the site itself.
-
+// Structured data is per-page in src/lib/seo.ts, not the root layout.
 export const Route = createRootRoute({
   head: () => ({
     meta: [
@@ -39,14 +34,11 @@ function Root() {
         <HeadContent />
       </head>
       <body className="antialiased">
-        {import.meta.env.VITE_PUBLIC_STANDALONE === "false" ? <PreviewHostBridge /> : null}
-        <AuthProvider>
-          <TooltipProvider delayDuration={200}>
-            <AppShell>
-              <Outlet />
-            </AppShell>
-          </TooltipProvider>
-        </AuthProvider>
+        <TooltipProvider delayDuration={200}>
+          <AppShell>
+            <Outlet />
+          </AppShell>
+        </TooltipProvider>
         <Scripts />
       </body>
     </html>
