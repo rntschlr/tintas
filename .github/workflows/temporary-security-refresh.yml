@@ -1,0 +1,42 @@
+# One-time maintenance runner. Remove from the branch before merging.
+name: Temporary security dependency refresh
+on:
+  push:
+    branches:
+      - maintenance/security-dependency-refresh-2026-11-20
+    paths:
+      - .github/workflows/temporary-security-refresh.yml
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    if: github.repository == 'rntschlr/tintas'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Resolve patched packages and lockfile
+        run: |
+          npm install --package-lock-only --ignore-scripts --no-fund --save-exact better-auth@1.7.26 zod@4.6.7
+          npm install --package-lock-only --ignore-scripts --no-fund --save-dev --save-exact vite@8.3.5 typescript-eslint@8.72.3
+          npm audit fix --package-lock-only --ignore-scripts --no-fund --audit-level=moderate
+          npm audit --audit-level=moderate
+      - name: Confirm clean installation
+        run: npm ci --ignore-scripts
+      - name: Commit repaired dependency manifest and lockfile
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          if ! git diff --cached --quiet; then
+            git commit -m "fix(deps): update vulnerable packages and regenerate lockfile"
+            git push origin HEAD:maintenance/security-dependency-refresh-2026-11-20
+          fi
