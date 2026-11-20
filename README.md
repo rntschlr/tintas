@@ -56,7 +56,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open **http://localhost:8080**. Keep the public configuration from [`.env.example`](.env.example): `VITE_AUTH_ENABLED=false`, `VITE_PUBLIC_STANDALONE=true`, and `VITE_SHIP_GROK_CHROME=false`. Never put secrets in a `VITE_` variable; these values can be included in browser code.
+Open **http://localhost:8080**. Tinta has no login or database configuration. The optional `VITE_PUBLIC_SITE_URL` in [`.env.example`](.env.example) controls public metadata. Never put secrets in a `VITE_` variable; Vite can include these values in browser code.
 
 Run the same checks used by pull requests:
 
@@ -74,7 +74,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for previewing changes, checking interact
 
 **The public notebook is a server-rendered application with browser-local progress.** React 19 and TanStack Router/Start provide the interface and routing; Vite 8, Tailwind CSS 4, and Nitro build the application for Cloudflare Pages. Figtree and Fraunces are self-hosted.
 
-The server renders pages and serves the application. Learning content lives in typed source files, and quizzes, bookmarks, and reading progress run in the browser. The repository also retains optional authentication, database, and connector helpers from its original scaffold; the public notebook does not use them for learner data or offer account sync.
+The server renders pages and serves the application. Learning content lives in typed source files, and quizzes, bookmarks, and reading progress run in the browser. The repository intentionally has no account system, server-side learner database, or connector integration.
 
 The [architecture guide](docs/architecture.md) explains the boundaries, source layout, and what would be needed before adding a persistent backend.
 
